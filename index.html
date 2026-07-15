@@ -385,7 +385,6 @@
     <span id="hudBelievers">believers: 0</span>
     <span id="hudProg">start</span>
     <span>
-      <button id="voiceBtn">voice: on</button>
       <button id="muteBtn">sound: on</button>
     </span>
   </div>
@@ -677,51 +676,6 @@ const sfx = {
 muteBtn.onclick = ()=>{
   muted = !muted;
   muteBtn.textContent = 'sound: ' + (muted?'off':'on');
-};
-
-// ---------- narrator (browser TTS, no files needed) ----------
-const voiceBtn = document.getElementById('voiceBtn');
-let voiceOn = true;
-let narratorVoice = null;
-
-function pickVoice(){
-  if(!('speechSynthesis' in window)) return;
-  const voices = speechSynthesis.getVoices();
-  if(!voices.length) return;
-  // prefer a natural sounding english voice if one exists, otherwise take any english one
-  const favs = ['Google US English','Samantha','Daniel','Google UK English Male','Microsoft Aria'];
-  narratorVoice =
-    voices.find(v=>favs.some(f=>v.name.includes(f))) ||
-    voices.find(v=>v.lang && v.lang.startsWith('en')) ||
-    voices[0];
-}
-if('speechSynthesis' in window){
-  pickVoice();
-  speechSynthesis.onvoiceschanged = pickVoice;
-} else {
-  voiceOn = false;
-  voiceBtn.textContent = 'voice: n/a';
-  voiceBtn.disabled = true;
-}
-
-function speak(text){
-  if(!voiceOn || !('speechSynthesis' in window)) return;
-  speechSynthesis.cancel(); // stop the previous card if it's still going
-  const u = new SpeechSynthesisUtterance(text);
-  if(narratorVoice) u.voice = narratorVoice;
-  u.rate = 0.98;
-  u.pitch = 0.9;
-  u.volume = 0.9;
-  speechSynthesis.speak(u);
-}
-function hushNarrator(){
-  if('speechSynthesis' in window) speechSynthesis.cancel();
-}
-voiceBtn.onclick = ()=>{
-  if(voiceBtn.disabled) return;
-  voiceOn = !voiceOn;
-  voiceBtn.textContent = 'voice: ' + (voiceOn?'on':'off');
-  if(!voiceOn) hushNarrator();
 };
 
 // ----- six chapters -----
