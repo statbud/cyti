@@ -247,6 +247,51 @@
   #calc textarea{min-height:90px; resize:vertical;}
   #calc textarea:focus, #calc input:focus{outline:2px solid #c0392b; outline-offset:1px;}
   #checkBtn{margin-top:20px;}
+  .rate{
+    max-width:640px;
+    margin-top:24px;
+    padding:16px 18px;
+    border:1px solid #ddd;
+    border-radius:3px;
+    background:#fafafa;
+  }
+  .rate.after{display:none; border-color:#c0392b; background:#fdf3f2;}
+  .rate .q{
+    font-family:'Courier New',monospace;
+    font-size:14px;
+    margin-bottom:12px;
+  }
+  .pills{display:flex; gap:8px; flex-wrap:wrap;}
+  .pill{
+    font-family:'Courier New',monospace;
+    font-size:14px;
+    border:1px solid var(--ink);
+    background:#fff;
+    color:var(--ink);
+    padding:7px 14px;
+    cursor:pointer;
+    border-radius:3px;
+    min-width:38px;
+  }
+  .pill:hover{background:#f0f0f0;}
+  .pill.sel{background:#c0392b; color:#fff; border-color:#c0392b;}
+  .pill.sel.done{cursor:default;}
+  .rate .ends{
+    display:flex;
+    justify-content:space-between;
+    font-family:'Courier New',monospace;
+    font-size:11px;
+    color:var(--grey);
+    margin-top:8px;
+    max-width:270px;
+  }
+  .rate .thanks{
+    font-family:'Courier New',monospace;
+    font-size:13px;
+    color:#c0392b;
+    margin-top:10px;
+    display:none;
+  }
   #calcStatus{
     font-family:'Courier New', Courier, monospace;
     font-size:14px;
@@ -567,6 +612,18 @@
   <label for="sourceInput">Source link (optional)</label>
   <input type="text" id="sourceInput" placeholder="https://...">
 
+  <div class="rate" id="rateBefore">
+    <div class="q">Before we check it, how much do you believe this? (optional)</div>
+    <div class="pills" id="pillsBefore">
+      <button class="pill" data-v="1">1</button>
+      <button class="pill" data-v="2">2</button>
+      <button class="pill" data-v="3">3</button>
+      <button class="pill" data-v="4">4</button>
+      <button class="pill" data-v="5">5</button>
+    </div>
+    <div class="ends"><span>1 = no way</span><span>5 = totally buy it</span></div>
+  </div>
+
   <br>
   <button class="big" id="checkBtn">Check it</button>
   <div id="calcStatus"></div>
@@ -577,6 +634,20 @@
     <div class="labelLine" id="scoreLabel"></div>
     <div class="why" id="whyText"></div>
     <div class="srcNote" id="srcNote" style="display:none;"></div>
+
+    <div class="rate after" id="rateAfter">
+      <div class="q">Now that you've seen the check, how much do you believe it? (optional)</div>
+      <div class="pills" id="pillsAfter">
+        <button class="pill" data-v="1">1</button>
+        <button class="pill" data-v="2">2</button>
+        <button class="pill" data-v="3">3</button>
+        <button class="pill" data-v="4">4</button>
+        <button class="pill" data-v="5">5</button>
+      </div>
+      <div class="ends"><span>1 = no way</span><span>5 = totally buy it</span></div>
+      <div class="thanks" id="rateThanks">Logged. Thanks for being honest.</div>
+    </div>
+
     <div class="disclaimer">Quick disclaimer: this is an automated check. It can miss things, misread a source, or just be wrong. Treat it as a first pass, not a final answer, and click through to the original research when you can.</div>
   </div>
 </div>
@@ -1299,6 +1370,57 @@ const whyText    = document.getElementById('whyText');
 const srcNote    = document.getElementById('srcNote');
 const meterFill  = document.getElementById('meterFill');
 
+const rateAfter   = document.getElementById('rateAfter');
+const pillsBefore = document.getElementById('pillsBefore');
+const pillsAfter  = document.getElementById('pillsAfter');
+const rateThanks  = document.getElementById('rateThanks');
+
+let beforeVal = null, afterVal = null;
+
+// send a labeled event to GoatCounter (safe no-op if it isn't loaded)
+function track(path, title){
+  try{
+    if(window.goatcounter && window.goatcounter.count){
+      window.goatcounter.count({ path: path, title: title || path, event: true });
+    }
+  }catch(e){}
+}
+
+// wire up a set of rating pills. onPick fires with the chosen number.
+function wirePills(container, onPick){
+  container.querySelectorAll('.pill').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(container.dataset.locked) return;
+      container.querySelectorAll('.pill').forEach(b=>b.classList.remove('sel'));
+      btn.classList.add('sel');
+      onPick(parseInt(btn.dataset.v, 10));
+    });
+  });
+}
+function lockPills(container){
+  container.dataset.locked = '1';
+  container.querySelectorAll('.pill').forEach(b=>{
+    if(b.classList.contains('sel')) b.classList.add('done');
+    else b.style.opacity = 0.4;
+  });
+}
+
+wirePills(pillsBefore, v=>{ beforeVal = v; });
+
+wirePills(pillsAfter, v=>{
+  afterVal = v;
+  lockPills(pillsAfter);
+  // log the pieces so you can see them in GoatCounter
+  if(beforeVal) track('confidence-before-'+beforeVal, 'Confidence before');
+  track('confidence-after-'+afterVal, 'Confidence after');
+  if(beforeVal){
+    const shift = afterVal - beforeVal;                 // negative = became more skeptical
+    const tag = shift>0 ? '+'+shift : ''+shift;
+    track('confidence-shift-'+tag, 'Confidence shift');
+  }
+  rateThanks.style.display='block';
+});
+
 checkBtn.addEventListener('click', async ()=>{
   const claim  = claimInput.value.trim();
   const source = sourceInput.value.trim();
@@ -1311,6 +1433,12 @@ checkBtn.addEventListener('click', async ()=>{
   checkBtn.disabled = true;
   resultBox.style.display = 'none';
   status.textContent = 'Checking. This usually takes 10 to 30 seconds.';
+
+  // reset the "after" rating for this run
+  afterVal = null;
+  delete pillsAfter.dataset.locked;
+  pillsAfter.querySelectorAll('.pill').forEach(b=>{ b.classList.remove('sel','done'); b.style.opacity=1; });
+  rateThanks.style.display='none';
 
   const prompt =
     'Someone wants to know how accurate this claim or statistic is:\n\n"' + claim + '"\n\n' +
@@ -1360,6 +1488,8 @@ checkBtn.addEventListener('click', async ()=>{
 
     status.textContent = '';
     resultBox.style.display = 'block';
+    // only ask for the "after" rating if they gave a "before" one
+    rateAfter.style.display = beforeVal ? 'block' : 'none';
   }catch(err){
     console.error(err);
     status.textContent = 'Something went wrong on our end. Give it another try in a bit.';
