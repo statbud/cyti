@@ -637,6 +637,8 @@ document.querySelectorAll('nav a').forEach(a=>{
     document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
     a.classList.add('on');
     document.getElementById(a.dataset.page).classList.add('on');
+    // leaving the game page fully stops the game and puts it back on the start screen
+    if(a.dataset.page !== 'home' && window.stopGame) window.stopGame();
   });
 });
 
@@ -772,6 +774,16 @@ document.getElementById('againBtn').onclick = ()=>{
   endOverlay.style.display='none';
   reset();
   startOverlay.style.display='flex';
+};
+
+// fully stop the game (used when the user switches to another page).
+// clears held keys too, so nothing stays "pressed" when they come back.
+window.stopGame = function(){
+  running = false;
+  for(const k in keys) keys[k] = false;
+  reset();
+  endOverlay.style.display = 'none';
+  startOverlay.style.display = 'flex';
 };
 
 // ---------- helpers ----------
