@@ -138,7 +138,7 @@
     color:var(--grey);
     padding:10px 2px 0;
   }
-  #muteBtn, #voiceBtn{
+  #muteBtn{
     font-family:'Courier New', Courier, monospace;
     font-size:13px;
     background:none;
@@ -148,7 +148,7 @@
     cursor:pointer;
     border-radius:3px;
   }
-  #muteBtn:hover, #voiceBtn:hover{border-color:var(--grey);}
+  #muteBtn:hover{border-color:var(--grey);}
 
   /* placeholder + calculator pages */
   .inner h1{
@@ -247,50 +247,55 @@
   #calc textarea{min-height:90px; resize:vertical;}
   #calc textarea:focus, #calc input:focus{outline:2px solid #c0392b; outline-offset:1px;}
   #checkBtn{margin-top:20px;}
-  .rate{
-    max-width:640px;
-    margin-top:24px;
-    padding:16px 18px;
-    border:1px solid #ddd;
-    border-radius:3px;
-    background:#fafafa;
+  .breakHead{
+    font-family:'Special Elite','Courier New',monospace;
+    font-size:19px;
+    margin-top:26px;
+    padding-top:18px;
+    border-top:1px solid var(--ink);
   }
-  .rate.after{display:none; border-color:#c0392b; background:#fdf3f2;}
-  .rate .q{
-    font-family:'Courier New',monospace;
+  .breakSub{
     font-size:14px;
-    margin-bottom:12px;
+    color:var(--grey);
+    margin:6px 0 14px;
   }
-  .pills{display:flex; gap:8px; flex-wrap:wrap;}
-  .pill{
-    font-family:'Courier New',monospace;
-    font-size:14px;
-    border:1px solid var(--ink);
-    background:#fff;
-    color:var(--ink);
-    padding:7px 14px;
-    cursor:pointer;
-    border-radius:3px;
-    min-width:38px;
+  .factor{
+    padding:14px 0;
+    border-bottom:1px dotted #ccc;
   }
-  .pill:hover{background:#f0f0f0;}
-  .pill.sel{background:#c0392b; color:#fff; border-color:#c0392b;}
-  .pill.sel.done{cursor:default;}
-  .rate .ends{
+  .factor:last-child{border-bottom:none;}
+  .factor .frow{
     display:flex;
     justify-content:space-between;
-    font-family:'Courier New',monospace;
-    font-size:11px;
-    color:var(--grey);
-    margin-top:8px;
-    max-width:270px;
+    align-items:baseline;
+    gap:12px;
   }
-  .rate .thanks{
+  .factor .fname{
     font-family:'Courier New',monospace;
-    font-size:13px;
-    color:#c0392b;
-    margin-top:10px;
-    display:none;
+    font-size:14px;
+    font-weight:bold;
+  }
+  .factor .fweight{
+    font-family:'Courier New',monospace;
+    font-size:12px;
+    color:var(--grey);
+  }
+  .factor .fscore{
+    font-family:'Courier New',monospace;
+    font-size:14px;
+    margin-left:auto;
+  }
+  .factor .fmeter{
+    height:6px;
+    background:#eee;
+    border-radius:3px;
+    margin:8px 0;
+    overflow:hidden;
+  }
+  .factor .fmeter > div{height:100%;}
+  .factor .fnote{
+    font-size:15px;
+    color:#333;
   }
   #calcStatus{
     font-family:'Courier New', Courier, monospace;
@@ -318,12 +323,6 @@
     color:#444;
   }
   #calcResult .why{margin-bottom:14px;}
-  #calcResult .srcNote{
-    border-top:1px solid #ddd;
-    padding-top:12px;
-    margin-bottom:14px;
-    font-size:16px;
-  }
   #calcResult .disclaimer{
     font-size:13px;
     color:var(--grey);
@@ -384,9 +383,7 @@
   <div id="hud">
     <span id="hudBelievers">believers: 0</span>
     <span id="hudProg">start</span>
-    <span>
-      <button id="muteBtn">sound: on</button>
-    </span>
+    <button id="muteBtn">sound: on</button>
   </div>
 </div>
 
@@ -611,7 +608,23 @@
   <label for="sourceInput">Source link (optional)</label>
   <input type="text" id="sourceInput" placeholder="https://...">
 
-    <div class="disclaimer">Quick disclaimer: this is an automated check. It can miss things, misread a source, or just be wrong. Treat it as a first pass, not a final answer, and click through to the original research when you can.</div>
+  <br>
+  <button class="big" id="checkBtn">Check it</button>
+  <div id="calcStatus"></div>
+
+  <div id="calcResult">
+    <div class="scoreHead">
+      <div class="score"><span id="scoreNum">--</span>/100</div>
+      <div class="meter"><div id="meterFill"></div></div>
+      <div class="labelLine" id="scoreLabel"></div>
+    </div>
+    <div class="why" id="whyText"></div>
+
+    <div class="breakHead">How the score breaks down</div>
+    <p class="breakSub">The overall score is a weighted average of these seven factors. Heavier weights count for more of the final number.</p>
+    <div id="factorList"></div>
+
+    <div class="disclaimer">Reminder: this is just a calculator that checks things automatically, and it can get things wrong. The best way to decide whether to believe or apply a claim is to look at the source yourself and do your own fact-checking.</div>
   </div>
 </div>
 
@@ -730,7 +743,6 @@ const P = { x:90, y:GROUND-BASE_R, r:BASE_R, vx:0, vy:0, onGround:true,
 const keys = {};
 let running=false, ended=false, camX=0, t=0;
 let cardBeat=null, cardAlpha=0;
-const spokenBeats = new Set();
 
 addEventListener('keydown', e=>{
   const k = e.key.toLowerCase();
@@ -746,8 +758,6 @@ function reset(){
   doors.forEach(d=>{d.shut=false; d.shutT=0; d.slammed=false;});
   store.guardT=0; clinic.turnT=0;
   camX=0; ended=false; cardBeat=null; cardAlpha=0;
-  spokenBeats.clear();
-  hushNarrator();
   hudBelievers.textContent='believers: 0';
   hudProg.textContent='start';
 }
@@ -844,13 +854,7 @@ function step(){
     const d=Math.abs(P.x-b.x);
     if(d<380 && d<best){ best=d; near=b; }
   }
-  if(near){
-    if(near!==cardBeat && !spokenBeats.has(near)){
-      spokenBeats.add(near);
-      speak(near.txt);
-    }
-    cardBeat=near;
-  }
+  if(near) cardBeat=near;
   const visible = cardBeat && Math.abs(P.x-cardBeat.x) < 640;
   cardAlpha += ((visible?1:0)-cardAlpha)*0.08;
 
@@ -1285,59 +1289,25 @@ const resultBox  = document.getElementById('calcResult');
 const scoreNum   = document.getElementById('scoreNum');
 const scoreLabel = document.getElementById('scoreLabel');
 const whyText    = document.getElementById('whyText');
-const srcNote    = document.getElementById('srcNote');
 const meterFill  = document.getElementById('meterFill');
+const factorList = document.getElementById('factorList');
 
-const rateAfter   = document.getElementById('rateAfter');
-const pillsBefore = document.getElementById('pillsBefore');
-const pillsAfter  = document.getElementById('pillsAfter');
-const rateThanks  = document.getElementById('rateThanks');
+// The seven factors and how much each one counts toward the overall score.
+// Weights add up to 100. Source reliability weighs the most because a claim
+// is only as good as where it comes from.
+const FACTORS = [
+  {key:'source_reliability', name:'Source reliability',    weight:25},
+  {key:'sample_size',        name:'Sample size',           weight:15},
+  {key:'sampling_bias',      name:'Sampling bias',         weight:15},
+  {key:'misleading',         name:'Misleading framing',    weight:15},
+  {key:'confounding',        name:'Confounding variables', weight:10},
+  {key:'replicability',      name:'Replicability',         weight:10},
+  {key:'math_check',         name:'Math & consistency',    weight:10},
+];
 
-let beforeVal = null, afterVal = null;
-
-// send a labeled event to GoatCounter (safe no-op if it isn't loaded)
-function track(path, title){
-  try{
-    if(window.goatcounter && window.goatcounter.count){
-      window.goatcounter.count({ path: path, title: title || path, event: true });
-    }
-  }catch(e){}
+function meterColor(s){
+  return s>=70 ? '#2e7d32' : (s>=40 ? '#c78a2b' : '#c0392b');
 }
-
-// wire up a set of rating pills. onPick fires with the chosen number.
-function wirePills(container, onPick){
-  container.querySelectorAll('.pill').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      if(container.dataset.locked) return;
-      container.querySelectorAll('.pill').forEach(b=>b.classList.remove('sel'));
-      btn.classList.add('sel');
-      onPick(parseInt(btn.dataset.v, 10));
-    });
-  });
-}
-function lockPills(container){
-  container.dataset.locked = '1';
-  container.querySelectorAll('.pill').forEach(b=>{
-    if(b.classList.contains('sel')) b.classList.add('done');
-    else b.style.opacity = 0.4;
-  });
-}
-
-wirePills(pillsBefore, v=>{ beforeVal = v; });
-
-wirePills(pillsAfter, v=>{
-  afterVal = v;
-  lockPills(pillsAfter);
-  // log the pieces so you can see them in GoatCounter
-  if(beforeVal) track('confidence-before-'+beforeVal, 'Confidence before');
-  track('confidence-after-'+afterVal, 'Confidence after');
-  if(beforeVal){
-    const shift = afterVal - beforeVal;                 // negative = became more skeptical
-    const tag = shift>0 ? '+'+shift : ''+shift;
-    track('confidence-shift-'+tag, 'Confidence shift');
-  }
-  rateThanks.style.display='block';
-});
 
 checkBtn.addEventListener('click', async ()=>{
   const claim  = claimInput.value.trim();
@@ -1352,20 +1322,24 @@ checkBtn.addEventListener('click', async ()=>{
   resultBox.style.display = 'none';
   status.textContent = 'Checking. This usually takes 10 to 30 seconds.';
 
-  // reset the "after" rating for this run
-  afterVal = null;
-  delete pillsAfter.dataset.locked;
-  pillsAfter.querySelectorAll('.pill').forEach(b=>{ b.classList.remove('sel','done'); b.style.opacity=1; });
-  rateThanks.style.display='none';
+  const sourceLine = source
+    ? 'They also gave this source link: ' + source + '\nUse that specific source as the basis for EVERY factor below, including source reliability (who publishes it, is it trustworthy, does it actually support the claim as written).\n\n'
+    : 'No source link was given. For the source reliability factor, judge the main sources where this claim actually comes from or circulates.\n\n';
 
   const prompt =
     'Someone wants to know how accurate this claim or statistic is:\n\n"' + claim + '"\n\n' +
-    (source
-      ? 'They also gave this source link: ' + source + '\nSearch for and evaluate that specific source. Who published it, is it reliable, and does it actually support the claim as written?\n\n'
-      : '') +
-    'Use web search to verify the claim against good sources. Then respond with ONLY a raw JSON object. No markdown, no backticks, no text before or after. Use this exact shape:\n' +
-    '{"score": <integer 0 to 100 for how accurate and well supported the claim is>, "label": "<a 3 to 6 word verdict>", "explanation": "<3 to 5 short sentences in plain, simple language explaining why. No jargon. Mention what the evidence actually says, and if the claim is a distorted version of something true, explain the distortion.>", "source_note": ' +
-    (source ? '"<2 to 3 sentences specifically about the provided source: who runs it, how trustworthy it is, and whether it backs up the claim>"' : 'null') + '}';
+    sourceLine +
+    'Use web search to verify. Then grade the claim on these seven factors, each scored 0 to 100 (100 = no problems at all on that factor, 0 = completely fails it):\n' +
+    '- source_reliability: how trustworthy is the source behind the claim\n' +
+    '- sample_size: was the underlying data based on enough people or cases\n' +
+    '- sampling_bias: did the people or cases studied fairly represent the group the claim is about\n' +
+    '- misleading: is the claim framed, worded, or charted in a way that exaggerates or distorts what the data shows\n' +
+    '- confounding: could other variables explain the result that the claim ignores\n' +
+    '- replicability: have other studies or sources found the same thing\n' +
+    '- math_check: are the numbers calculated and reported correctly (percentages, base rates, comparisons)\n\n' +
+    'If a factor cannot be fully judged from available info, score it on what is known and say so in the note.\n\n' +
+    'Respond with ONLY a raw JSON object. No markdown, no backticks, no text before or after. Exact shape:\n' +
+    '{"label": "<a 3 to 6 word overall verdict>", "summary": "<2 to 4 short sentences in plain simple language: is the claim accurate, and if it is a distorted version of something true, what is the real version>", "factors": {"source_reliability": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "sample_size": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "sampling_bias": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "misleading": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "confounding": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "replicability": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "math_check": {"score": <0-100>, "note": "<1-2 plain sentences>"}}}';
 
   try{
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1373,7 +1347,7 @@ checkBtn.addEventListener('click', async ()=>{
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         model:'claude-sonnet-4-6',
-        max_tokens:1000,
+        max_tokens:1500,
         messages:[{role:'user', content: prompt}],
         tools:[{type:'web_search_20250305', name:'web_search'}]
       })
@@ -1390,24 +1364,40 @@ checkBtn.addEventListener('click', async ()=>{
     const jsonEnd = clean.lastIndexOf('}');
     const parsed = JSON.parse(clean.slice(jsonStart, jsonEnd+1));
 
-    const score = Math.max(0, Math.min(100, Math.round(parsed.score)));
-    scoreNum.textContent = score;
-    meterFill.style.width = score + '%';
-    meterFill.style.background = score>=70 ? '#2e7d32' : (score>=40 ? '#c78a2b' : '#c0392b');
-    scoreLabel.textContent = parsed.label || '';
-    whyText.textContent = parsed.explanation || '';
+    // build the factor rows and compute the weighted overall score ourselves,
+    // so the math on screen always adds up
+    factorList.innerHTML = '';
+    let weighted = 0, totalW = 0;
 
-    if(parsed.source_note){
-      srcNote.style.display='block';
-      srcNote.textContent = 'About your source: ' + parsed.source_note;
-    } else {
-      srcNote.style.display='none';
+    for(const f of FACTORS){
+      const raw = parsed.factors && parsed.factors[f.key] ? parsed.factors[f.key] : {score:50, note:'Could not be judged from available info.'};
+      const s = Math.max(0, Math.min(100, Math.round(raw.score)));
+      weighted += s * f.weight;
+      totalW  += f.weight;
+
+      const row = document.createElement('div');
+      row.className = 'factor';
+      row.innerHTML =
+        '<div class="frow">' +
+          '<span class="fname">' + f.name + '</span>' +
+          '<span class="fweight">weight: ' + f.weight + '%</span>' +
+          '<span class="fscore">' + s + '/100</span>' +
+        '</div>' +
+        '<div class="fmeter"><div style="width:' + s + '%; background:' + meterColor(s) + ';"></div></div>' +
+        '<div class="fnote"></div>';
+      row.querySelector('.fnote').textContent = raw.note || '';
+      factorList.appendChild(row);
     }
+
+    const overall = Math.round(weighted / totalW);
+    scoreNum.textContent = overall;
+    meterFill.style.width = overall + '%';
+    meterFill.style.background = meterColor(overall);
+    scoreLabel.textContent = parsed.label || '';
+    whyText.textContent = parsed.summary || '';
 
     status.textContent = '';
     resultBox.style.display = 'block';
-    // only ask for the "after" rating if they gave a "before" one
-    rateAfter.style.display = beforeVal ? 'block' : 'none';
   }catch(err){
     console.error(err);
     status.textContent = 'Something went wrong on our end. Give it another try in a bit.';
