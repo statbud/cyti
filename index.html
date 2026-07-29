@@ -65,8 +65,109 @@
   .page{display:none; max-width:980px; margin:0 auto; padding:40px 28px 80px;}
   .page.on{display:block;}
 
-  /* home / game */
+  /* ---------- home: spot the fake ---------- */
   #home h1{
+    font-size:34px;
+    margin-bottom:10px;
+  }
+  #home .lede{
+    color:var(--grey);
+    max-width:560px;
+    margin-bottom:6px;
+  }
+  #roundLine{
+    font-family:'Courier New', Courier, monospace;
+    font-size:13px;
+    color:var(--grey);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    border-top:1px solid var(--ink);
+    padding-top:10px;
+    margin-top:26px;
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+  }
+  #cards{margin-top:14px;}
+  .claim{
+    display:grid;
+    grid-template-columns:26px 1fr;
+    gap:16px;
+    width:100%;
+    text-align:left;
+    background:#fff;
+    border:1px solid var(--ink);
+    border-radius:2px;
+    padding:16px 18px;
+    margin-bottom:12px;
+    font-family:Georgia, 'Times New Roman', serif;
+    font-size:17px;
+    line-height:1.5;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .claim:hover:not(.done){background:#faf7f2;}
+  .claim:focus-visible{outline:2px solid #c0392b; outline-offset:2px;}
+  .claim .key{
+    font-family:'Courier New', Courier, monospace;
+    font-size:15px;
+    color:var(--grey);
+    padding-top:1px;
+  }
+  .claim.done{cursor:default;}
+  .claim.real{border-color:#ccc; color:#333;}
+  .claim.real .key{color:#bbb;}
+  .claim.fake{border-color:#c0392b; border-width:2px; padding:15px 17px;}
+  .claim.picked .key{color:var(--ink); font-weight:bold;}
+  .tagline{
+    grid-column:2 / -1;
+    font-family:'Courier New', Courier, monospace;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px dotted #ccc;
+  }
+  .claim.real .tagline{color:var(--grey);}
+  .claim.fake .tagline{color:#c0392b;}
+  .after{grid-column:2 / -1; font-size:15px; color:#444; margin-top:5px;}
+  .after em{color:var(--grey); font-style:normal; font-family:'Courier New', Courier, monospace; font-size:13px;}
+
+  #verdict{
+    display:none;
+    border-top:1px solid var(--ink);
+    margin-top:22px;
+    padding-top:18px;
+    align-items:baseline;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  #verdict.on{display:flex;}
+  #verdictText{
+    font-family:'Special Elite', 'Courier New', monospace;
+    font-size:22px;
+    margin-right:auto;
+  }
+  #verdictText.win{color:#111;}
+  #verdictText.lose{color:#c0392b;}
+  #tally{
+    font-family:'Courier New', Courier, monospace;
+    font-size:14px;
+    color:var(--grey);
+  }
+  #closer{
+    margin-top:34px;
+    padding-top:16px;
+    border-top:1px solid var(--ink);
+    font-style:italic;
+    color:var(--grey);
+    font-size:16px;
+    max-width:620px;
+  }
+
+  /* ---------- says who? (the walking game) ---------- */
+  #game h1{
     font-size:34px;
     margin-bottom:20px;
   }
@@ -132,6 +233,7 @@
     border-radius:3px;
   }
   button.quiet:hover{background:#f2f2f2;}
+  button.quiet:focus-visible{outline:2px solid #c0392b; outline-offset:2px;}
 
   #hud{
     display:flex;
@@ -154,7 +256,7 @@
   }
   #muteBtn:hover{border-color:var(--grey);}
 
-  /* placeholder + calculator pages */
+  /* shared inner-page bits */
   .inner h1{
     font-size:30px;
     font-weight:normal;
@@ -230,130 +332,13 @@
     #info .card{grid-template-columns:1fr; gap:16px;}
   }
 
-  /* calculator */
-  #calc label{
-    display:block;
-    font-family:'Courier New', Courier, monospace;
-    font-size:14px;
-    margin:22px 0 6px;
-  }
-  #calc textarea, #calc input[type=text]{
-    width:100%;
-    max-width:640px;
-    font-family:Georgia, serif;
-    font-size:16px;
-    padding:10px 12px;
-    border:1px solid var(--ink);
-    border-radius:2px;
-    background:#fff;
-    color:var(--ink);
-  }
-  #calc textarea{min-height:90px; resize:vertical;}
-  #calc textarea:focus, #calc input:focus{outline:2px solid #c0392b; outline-offset:1px;}
-  #checkBtn{margin-top:20px;}
-  .breakHead{
-    font-family:'Special Elite','Courier New',monospace;
-    font-size:19px;
-    margin-top:26px;
-    padding-top:18px;
-    border-top:1px solid var(--ink);
-  }
-  .breakSub{
-    font-size:14px;
-    color:var(--grey);
-    margin:6px 0 14px;
-  }
-  .factor{
-    padding:14px 0;
-    border-bottom:1px dotted #ccc;
-  }
-  .factor:last-child{border-bottom:none;}
-  .factor .frow{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    gap:12px;
-  }
-  .factor .fname{
-    font-family:'Courier New',monospace;
-    font-size:14px;
-    font-weight:bold;
-  }
-  .factor .fweight{
-    font-family:'Courier New',monospace;
-    font-size:12px;
-    color:var(--grey);
-  }
-  .factor .fscore{
-    font-family:'Courier New',monospace;
-    font-size:14px;
-    margin-left:auto;
-  }
-  .factor .fmeter{
-    height:6px;
-    background:#eee;
-    border-radius:3px;
-    margin:8px 0;
-    overflow:hidden;
-  }
-  .factor .fmeter > div{height:100%;}
-  .factor .fnote{
-    font-size:15px;
-    color:#333;
-  }
-  #calcStatus{
-    font-family:'Courier New', Courier, monospace;
-    font-size:14px;
-    color:var(--grey);
-    margin-top:16px;
-  }
-  #calcResult{
-    display:none;
-    margin-top:28px;
-    max-width:640px;
-    border:1px solid var(--ink);
-    border-radius:2px;
-    padding:22px 24px;
-  }
-  #calcResult .score{
-    font-family:'Special Elite', 'Courier New', monospace;
-    font-size:44px;
-    line-height:1;
-  }
-  #calcResult .labelLine{
-    font-family:'Courier New', Courier, monospace;
-    font-size:15px;
-    margin:6px 0 16px;
-    color:#444;
-  }
-  #calcResult .why{margin-bottom:14px;}
-  #calcResult .disclaimer{
-    font-size:13px;
-    color:var(--grey);
-    font-family:'Courier New', Courier, monospace;
-    border-top:1px solid #ddd;
-    padding-top:12px;
-  }
-  .meter{
-    height:8px;
-    background:#eee;
-    border-radius:4px;
-    max-width:300px;
-    margin:10px 0 4px;
-    overflow:hidden;
-  }
-  .meter > div{
-    height:100%;
-    background:#c0392b;
-    width:0%;
-    transition:width .6s ease;
-  }
-
   @media (max-width:640px){
     nav{gap:16px; padding:16px;}
     .page{padding:24px 16px 60px;}
-    #home h1{font-size:26px;}
+    #home h1, #game h1{font-size:26px;}
     #startOverlay h2, #endOverlay h2{font-size:28px;}
+    .claim{grid-template-columns:20px 1fr; gap:12px; font-size:16px; padding:14px 15px;}
+    #verdictText{font-size:19px;}
   }
 </style>
 </head>
@@ -361,12 +346,31 @@
 
 <nav>
   <span class="brand">CanYouTrustIt</span>
-  <a class="on" data-page="home" href="#">Says Who?</a>
+  <a class="on" data-page="home" href="#">Spot the Fake</a>
+  <a data-page="game" href="#">Says Who?</a>
   <a data-page="info" href="#">More Info</a>
-  <a data-page="calc" href="#">Calculator</a>
 </nav>
 
 <div class="page on" id="home">
+  <h1 class="display">Two of these are true</h1>
+  <p class="lede">One of them was made up. Pick the one you think is the fake.</p>
+
+  <div id="roundLine">
+    <span id="roundNum">round 1</span>
+    <span id="tally">0 right / 0 played</span>
+  </div>
+
+  <div id="cards"></div>
+
+  <div id="verdict">
+    <span id="verdictText"></span>
+    <button class="quiet" id="nextBtn">Next three</button>
+  </div>
+
+  <p id="closer"></p>
+</div>
+
+<div class="page" id="game">
   <h1 class="display">How a generalization is born</h1>
 
   <div id="gameWrap">
@@ -602,36 +606,6 @@
   <p class="closer">This doesn't mean every number is out to get you. Good statistics are one of the best tools we've got for actually understanding stuff. Just be aware of how a small error in a study can produce a completely innacurate result.</p>
 </div>
 
-<div class="page inner" id="calc">
-  <h1>Calculator</h1>
-  <p class="note">Paste a statistic or a claim. Add the source link if you have one. Get an interpretation of its accuracy.</p>
-
-  <label for="claimInput">The claim or statistic</label>
-  <textarea id="claimInput" placeholder="e.g. Humans only use 10% of their brains"></textarea>
-
-  <label for="sourceInput">Source link (optional)</label>
-  <input type="text" id="sourceInput" placeholder="https://...">
-
-  <br>
-  <button class="big" id="checkBtn">Check it</button>
-  <div id="calcStatus"></div>
-
-  <div id="calcResult">
-    <div class="scoreHead">
-      <div class="score"><span id="scoreNum">--</span>/100</div>
-      <div class="meter"><div id="meterFill"></div></div>
-      <div class="labelLine" id="scoreLabel"></div>
-    </div>
-    <div class="why" id="whyText"></div>
-
-    <div class="breakHead">How the score breaks down</div>
-    <p class="breakSub">The overall score is a weighted average of these seven factors. Heavier weights count for more of the final number.</p>
-    <div id="factorList"></div>
-
-    <div class="disclaimer">Reminder: this is just a calculator that checks things automatically, and it can get things wrong. The best way to decide whether to believe or apply a claim is to look at the source yourself and do your own fact-checking.</div>
-  </div>
-</div>
-
 <script>
 // ---------- page switching ----------
 document.querySelectorAll('nav a').forEach(a=>{
@@ -641,12 +615,374 @@ document.querySelectorAll('nav a').forEach(a=>{
     document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
     a.classList.add('on');
     document.getElementById(a.dataset.page).classList.add('on');
-    // leaving the game page fully stops the game and puts it back on the start screen
-    if(a.dataset.page !== 'home' && window.stopGame) window.stopGame();
+    // leaving the walking game fully stops it and puts it back on the start screen
+    if(a.dataset.page !== 'game' && window.stopGame) window.stopGame();
+    // landing on the home page always deals a fresh set of three
+    if(a.dataset.page === 'home' && window.newRound) window.newRound();
+    window.scrollTo(0,0);
   });
 });
 
-// ---------- game ----------
+// ---------- spot the fake ----------
+(function(){
+
+// Each entry: two claims that are true (with where to check them), and one
+// that was written to sound exactly like them but isn't.
+// t: [[claim, source], [claim, source]]   f: [claim, what's actually true]
+const ROUNDS = [
+
+{t:[["Honey recovered from ancient Egyptian tombs was still unspoiled thousands of years later.","Smithsonian Magazine"],
+    ["The Eiffel Tower can stand about 15 cm taller in summer, because its iron expands in the heat.","Société d'Exploitation de la Tour Eiffel"]],
+ f:["A single strand of human hair can hold up to 100 kg before it snaps.","A single strand holds roughly 100 grams. A whole head of hair could hold a couple of tons, which is where the confusion comes from."]},
+
+{t:[["Octopuses have three hearts, and their blood is blue because it carries oxygen with copper instead of iron.","Natural History Museum, London"],
+    ["Bananas are very slightly radioactive, because of the potassium-40 they contain.","US Nuclear Regulatory Commission"]],
+ f:["A goldfish's memory lasts about three seconds.","Goldfish have been trained to remember tasks for months. The three-second line has no study behind it."]},
+
+{t:[["Wombats produce cube-shaped droppings, made by uneven stiffness in the walls of their intestines.","Ig Nobel Prize 2019, Georgia Tech study"],
+    ["There are more possible chess games than there are atoms in the observable universe.","Claude Shannon, 1950"]],
+ f:["Humans only use about 10% of their brains.","Brain imaging shows nearly every region does something over the course of a day. Damage to almost any part of the brain causes problems."]},
+
+{t:[["Sharks are older than trees. Sharks appeared around 450 million years ago; the first trees around 390 million.","American Museum of Natural History"],
+    ["Cleopatra lived closer in time to the Moon landing than to the building of the Great Pyramid of Giza.","Pyramid c. 2560 BC, Cleopatra died 30 BC, Apollo 11 in 1969"]],
+ f:["Viking warriors wore horned helmets into battle.","Not one horned helmet has been found in a Viking grave. The look was invented by a costume designer for a Wagner opera in 1876."]},
+
+{t:[["Lightning strikes somewhere on Earth roughly 100 times every second.","NOAA"],
+    ["The Sahara was green grassland dotted with lakes about 6,000 years ago.","NASA Earth Observatory"]],
+ f:["You lose most of your body heat through your head.","Your head is about 10% of your surface area and loses roughly 10% of your heat. The claim traces to a badly designed army test where subjects wore everything except a hat."]},
+
+{t:[["A day on Venus is longer than a year on Venus.","NASA"],
+    ["The summit of Chimborazo in Ecuador, not Everest, is the point on Earth's surface farthest from the planet's centre.","NOAA"]],
+ f:["Mercury is the hottest planet in the solar system, because it is closest to the Sun.","Venus is hotter, at around 465°C, because its thick carbon dioxide atmosphere traps heat. Mercury has almost no atmosphere."]},
+
+{t:[["A king penguin named Nils Olav holds a rank in the Norwegian King's Guard and has been knighted.","Edinburgh Zoo / Norwegian King's Guard"],
+    ["The dot over a lowercase i or j has a name: it's called a tittle.","Oxford English Dictionary"]],
+ f:["Bulls charge at the colour red because it enrages them.","Cattle are red-green colourblind. The bull is reacting to the movement of the cape, not its colour."]},
+
+{t:[["Scotland's official national animal is the unicorn.","Royal Arms of Scotland"],
+    ["Oxford University was teaching students before the Aztec city of Tenochtitlan was founded.","Oxford from 1096; Tenochtitlan founded 1325"]],
+ f:["The Great Wall of China is the only human-made object visible from the Moon with the naked eye.","It isn't visible from the Moon at all, and it's barely detectable from low Earth orbit. It's narrow and the same colour as the ground around it."]},
+
+{t:[["Under some conditions hot water freezes faster than cold water, an effect named after a Tanzanian schoolboy.","Royal Society of Chemistry"],
+    ["Antarctica is the largest desert on Earth, because a desert is defined by rainfall, not heat.","British Antarctic Survey"]],
+ f:["Glass is a very slow-moving liquid, which is why old cathedral windows are thicker at the bottom.","Glass is an amorphous solid and does not flow at room temperature. Old panes vary in thickness because of how they were made."]},
+
+{t:[["Humans and chimpanzees share roughly 98.8% of their DNA.","Smithsonian Institution"],
+    ["Your body contains roughly as many bacterial cells as human cells.","Sender, Fuchs and Milo, PLOS Biology, 2016"]],
+ f:["Different parts of the tongue detect sweet, salty, sour and bitter separately.","The tongue map came from a mistranslation of a 1901 German paper. All taste types are detected across the whole tongue."]},
+
+{t:[["Koala fingerprints are so similar to human ones that they have been confused at crime scenes.","University of Adelaide"],
+    ["Sea otters sometimes hold hands while resting so they don't drift apart.","Vancouver Aquarium"]],
+ f:["Ostriches bury their heads in the sand when they're frightened.","They lower their heads to turn their eggs or to eat grit, which looks like burying from a distance. An ostrich that panics runs, or kicks."]},
+
+{t:[["The shortest war on record lasted under an hour: the Anglo-Zanzibar War of 1896.","Guinness World Records"],
+    ["Alaska has more coastline than every other US state put together.","NOAA"]],
+ f:["Napoleon Bonaparte was unusually short for his time.","He was about 1.68 m, average for a Frenchman then. The myth comes from French inches being longer than English ones, plus British wartime cartoons."]},
+
+{t:[["Ada Lovelace wrote what is generally considered the first computer algorithm, in 1843.","Computer History Museum"],
+    ["Microwave ovens, Wi-Fi and Bluetooth all share the same 2.4 GHz band.","US Federal Communications Commission"]],
+ f:["Water drains the opposite way in the Southern Hemisphere because of the Coriolis effect.","The Coriolis force is far too weak to steer a sink. The shape of the basin and how the water entered decide the direction."]},
+
+{t:[["Honeybees can be trained to recognise individual human faces.","Journal of Experimental Biology, 2005"],
+    ["Cows form close bonds with particular herd-mates and show stress when separated from them.","University of Northampton, 2011"]],
+ f:["A duck's quack doesn't echo.","An acoustics team at the University of Salford tested this in 2003. It echoes. The echo is just quiet and blends into the fading quack."]},
+
+{t:[["Venus rotates in the opposite direction to almost every other planet in the solar system.","NASA"],
+    ["Saturn is less dense than water, so in a big enough ocean it would float.","NASA"]],
+ f:["One side of the Moon is permanently dark and never sees sunlight.","Every part of the Moon gets sunlight. One side permanently faces away from us, which is why it's called the far side, not the dark side."]},
+
+{t:[["The US Supreme Court ruled in 1893 that tomatoes count as vegetables for tax purposes.","Nix v. Hedden, US Supreme Court"],
+    ["Peanuts are legumes and grow underground, so they aren't nuts at all.","US Department of Agriculture"]],
+ f:["Carrots are orange because Dutch growers bred them that way to honour the House of Orange.","A popular story with no contemporary evidence behind it. Orange carrots existed before the Dutch connection is supposed to have started."]},
+
+{t:[["The Pacific Ocean holds around half of all the free water on Earth.","NOAA"],
+    ["The Dead Sea is close to ten times saltier than ordinary seawater.","US Geological Survey"]],
+ f:["The ocean looks blue because it reflects the colour of the sky.","Water itself absorbs red and orange light more than blue, so blue is what's left to scatter back. It stays blue under a grey sky."]},
+
+{t:[["Sound travels about four times faster through water than through air.","NOAA"],
+    ["The 1883 eruption of Krakatoa was heard nearly 5,000 km away, the loudest sound in recorded history.","Smithsonian Institution"]],
+ f:["Lightning never strikes the same place twice.","The Empire State Building is struck around 20 to 25 times a year. Tall, isolated, conductive things get hit repeatedly."]},
+
+{t:[["There are roughly three trillion trees on Earth, far more than there are stars in the Milky Way.","Crowther et al., Nature, 2015"],
+    ["A teaspoon of neutron star material would weigh about a billion tons.","NASA"]],
+ f:["The Amazon rainforest produces 20% of the world's oxygen.","The forest consumes almost as much oxygen as it makes through respiration and decay. Its net contribution is close to zero. Most oxygen comes from ocean plankton."]},
+
+{t:[["Iceland has no native mosquito population, unlike its neighbours.","Icelandic Institute of Natural History"],
+    ["Finland has more saunas than it has cars.","Finnish Sauna Society"]],
+ f:["Norway has the longest coastline of any country in the world.","Canada's is longer. Norway's ranks second and only climbs that high when you count every fjord and island."]},
+
+{t:[["The Bluetooth logo is a combination of the runes for the initials of a 10th-century Danish king.","Bluetooth SIG"],
+    ["In Italian, the @ symbol is called a chiocciola, meaning snail.","Accademia della Crusca"]],
+ f:["The QWERTY keyboard was designed to slow typists down so machines wouldn't jam.","It was designed to stop common letter pairs hitting the same spot at once, which lets you type faster, not slower."]},
+
+{t:[["A blue whale calf can gain around 90 kg a day while nursing.","NOAA Fisheries"],
+    ["A blue whale's heart is roughly the size of a small car.","Royal Ontario Museum"]],
+ f:["Whales spray stored seawater out of their blowholes.","That plume is warm, moist air from the lungs condensing when it hits colder outside air. Whales don't hold water to spout."]},
+
+{t:[["Nepal's flag is the only national flag that isn't a rectangle.","Government of Nepal"],
+    ["Antarctica has no time zone of its own; research stations use whichever one suits them.","British Antarctic Survey"]],
+ f:["The Canary Islands are named after the canary birds that live there.","The islands were named first, from the Latin for dogs. The birds were then named after the islands."]},
+
+{t:[["Coca-Cola originally contained an extract of coca leaf, which was removed by the early 1900s.","Smithsonian Magazine"],
+    ["7 Up contained lithium citrate, a mood stabiliser, until 1948.","Smithsonian Magazine"]],
+ f:["Absinthe causes hallucinations because of a compound called thujone.","Tests on original bottles found thujone levels far too low to do anything. What people were experiencing was extremely strong alcohol."]},
+
+{t:[["The marathon winner at the 1904 Olympics was disqualified for riding part of the course in a car.","International Olympic Committee"],
+    ["The modern marathon distance was fixed at the 1908 London Games, partly to suit the royal viewing box.","World Athletics"]],
+ f:["A marathon is 26.2 miles because that's the exact distance from Marathon to Athens.","That route is closer to 25 miles, and early Olympic marathons varied in length. The 26.2 figure was set in 1908 and made standard afterwards."]},
+
+{t:[["More than half the world's population now lives in urban areas, a line crossed around 2007.","UN Department of Economic and Social Affairs"],
+    ["Roughly a quarter of the world's population is under 15 years old.","UN World Population Prospects"]],
+ f:["Half the world's population has never made a phone call.","This was already shaky when it circulated in the 1990s, and mobile subscriptions now outnumber people. It gets repeated anyway."]},
+
+{t:[["Global extreme poverty fell from around 36% of the world in 1990 to under 10% by 2015.","World Bank"],
+    ["Average life expectancy worldwide has roughly doubled since 1900.","World Health Organization"]],
+ f:["The average person swallows eight spiders a year while asleep.","This was invented as a demonstration of how quickly a fake fact spreads online. Spiders avoid a breathing, vibrating human."]},
+
+{t:[["An adult heart beats around 100,000 times a day.","American Heart Association"],
+    ["Your body replaces on the order of hundreds of billions of cells every day.","Sender and Milo, PNAS, 2021"]],
+ f:["Swallowed chewing gum stays in your stomach for seven years.","It isn't digested, but it doesn't stick around either. It passes through with everything else in a matter of days."]},
+
+{t:[["Around 10% of people are left-handed, and the figure has stayed steady across cultures.","Papadatou-Pastou et al., Psychological Bulletin, 2020"],
+    ["O negative is the universal red cell donor type, which is why it's used in emergencies.","American Red Cross"]],
+ f:["Cracking your knuckles causes arthritis.","Studies have found no link. One doctor cracked the knuckles on only one hand for over 60 years and found no difference between them."]},
+
+{t:[["For most people, vitamin C supplements don't prevent colds.","Cochrane Review"],
+    ["Antibiotics do nothing against a cold or flu, because those are viral.","US Centers for Disease Control and Prevention"]],
+ f:["Everyone needs eight glasses of water a day.","No study established that number. Needs vary by body, climate and activity, and food and other drinks count towards it."]},
+
+{t:[["Sugar has not been shown to cause hyperactivity in children.","Wolraich et al., JAMA, 1995"],
+    ["Reading in dim light strains your eyes temporarily but doesn't damage them.","American Academy of Ophthalmology"]],
+ f:["Shaving makes hair grow back thicker and darker.","Shaving cuts the hair at its widest point and leaves a blunt tip, which feels coarser. Growth rate, colour and thickness don't change."]},
+
+{t:[["Fever is part of the body's immune response, not something the infection does to you directly.","US National Institutes of Health"],
+    ["Only about 2% of the human genome codes for proteins.","National Human Genome Research Institute"]],
+ f:["Every cell in your body carries your full set of 46 chromosomes.","Mature red blood cells have no nucleus and carry no chromosomes at all. Egg and sperm cells carry 23."]},
+
+{t:[["The placebo effect can still work when people are openly told they're taking a placebo.","Kaptchuk et al., Beth Israel Deaconess / Harvard"],
+    ["The word placebo is Latin for 'I shall please'.","Oxford English Dictionary"]],
+ f:["Personality tests like the Myers-Briggs sort people into 16 stable, reliable types.","Around half of people get a different type when they retake it a few weeks later. Psychologists don't find evidence for discrete types."]},
+
+{t:[["Polygraph results are inadmissible in most US courts.","American Psychological Association"],
+    ["Handwriting analysis has no demonstrated ability to predict job performance.","British Psychological Society"]],
+ f:["People are either left-brained and logical or right-brained and creative.","A scan of over 1,000 brains found no evidence that people favour one hemisphere. Both sides work together on nearly everything."]},
+
+{t:[["The original 'Mozart effect' study found a small, short-lived boost on one spatial task, not a lasting IQ gain.","Rauscher, Shaw and Ky, Nature, 1993"],
+    ["Teaching to a student's 'learning style' has not been shown to improve results.","Pashler et al., Psychological Science in the Public Interest, 2008"]],
+ f:["The average human attention span has fallen to eight seconds, less than a goldfish.","This traces to a marketing summary that cited a source that never made the claim. No study measured a general human attention span dropping."]},
+
+{t:[["False news stories spread faster and reach more people on social media than true ones.","Vosoughi, Roy and Aral, Science, 2018"],
+    ["Retracted scientific papers keep getting cited for years after they're withdrawn.","Retraction Watch"]],
+ f:["Correcting a myth always backfires and makes people believe it more.","The backfire effect showed up in some early studies but has largely failed to replicate at scale. Corrections usually help, they just don't travel as far."]},
+
+{t:[["Only 39 of 100 psychology studies were successfully replicated in a large 2015 replication project.","Open Science Collaboration, Science, 2015"],
+    ["Requiring researchers to register their hypothesis in advance sharply cut the rate of positive results in medical trials.","Kaplan and Irvin, PLOS ONE, 2015"]],
+ f:["Peer review means independent scientists have re-analysed the study's raw data.","Reviewers usually read the manuscript only. Most never see the underlying data, and they aren't paid to check the arithmetic."]},
+
+{t:[["A well-drawn random sample of about 1,000 people gives a margin of error near ±3 points, whatever the population size.","Pew Research Center"],
+    ["Response rates for US telephone polls have fallen into the single digits.","Pew Research Center"]],
+ f:["A survey is only reliable if the sample is at least 10% of the population.","Sample size matters; the fraction of the population barely does. 1,000 random people describe a country of 60 million about as well as a country of 6 million."]},
+
+{t:[["A 1936 magazine poll with over two million responses confidently predicted the wrong US president, because of who it sampled.","American Statistical Association"],
+    ["The 'hot hand' in basketball turned out to be partly real once a subtle statistical error in the original study was corrected.","Miller and Sanjurjo, Econometrica, 2018"]],
+ f:["A correlation above 0.8 is strong enough to prove one thing causes the other.","Correlation of any strength says nothing about cause. A third factor, or pure coincidence, can produce a near-perfect correlation."]},
+
+{t:[["A trend can reverse when you combine groups, as in a famous Berkeley admissions case where each department favoured women but the total looked the opposite.","Bickel et al., Science, 1975"],
+    ["In many real datasets, the leading digit is a 1 about 30% of the time, which auditors use to spot faked figures.","Benford's law"]],
+ f:["A p-value of 0.05 means there's a 95% chance the finding is real.","It means that if nothing were going on, you'd see data this extreme 5% of the time. It says nothing directly about the chance the finding is true."]},
+
+{t:[["The Hundred Years' War lasted 116 years.","Encyclopaedia Britannica"],
+    ["Woolly mammoths were still alive on Wrangel Island while the Great Pyramid stood.","Nature"]],
+ f:["Ancient Greek and Roman statues were originally plain white marble.","They were painted in strong colours. The paint weathered off, and later collectors decided the bare stone was the intended look."]},
+
+{t:[["Roman seawater concrete gets stronger over time as seawater reacts with its volcanic ash.","American Mineralogist, 2017"],
+    ["The body casts at Pompeii are plaster poured into the hollows left where bodies decayed.","Archaeological Park of Pompeii"]],
+ f:["Roman gladiator fights almost always ended with one fighter dead.","Trained gladiators were expensive investments. Most bouts ended without a death, and fighters had records across many fights."]},
+
+{t:[["The people executed in the Salem witch trials were hanged, not burned.","Salem Witch Museum"],
+    ["The Library of Alexandria declined slowly over centuries rather than burning down in a single night.","Encyclopaedia Britannica"]],
+ f:["Medieval Europeans believed the Earth was flat until Columbus proved otherwise.","Educated Europeans had accepted a round Earth since antiquity. The argument against Columbus was that he had underestimated how far Asia was."]},
+
+{t:[["Einstein did not fail mathematics at school; he had mastered calculus by 15.","Einstein Archives"],
+    ["Einstein was offered the presidency of Israel in 1952 and turned it down.","Israel State Archives"]],
+ f:["Einstein won his Nobel Prize for the theory of relativity.","He won it in 1921 for explaining the photoelectric effect. Relativity was still considered too contentious by the committee."]},
+
+{t:[["Edison didn't invent the light bulb; he developed a version that lasted long enough to sell.","Smithsonian Institution"],
+    ["Alternating current won out over Edison's direct current for long-distance power.","IEEE"]],
+ f:["Benjamin Franklin proposed the turkey as the national bird of the United States.","He made a joke about it in a private letter, after the eagle had already been chosen. He never put the turkey forward."]},
+
+{t:[["Nintendo was founded in 1889 and originally made playing cards.","Nintendo Co., Ltd."],
+    ["Samsung started in 1938 as a trading company dealing in groceries and dried fish.","Samsung"]],
+ f:["The bite in the Apple logo is a tribute to Alan Turing.","The designer, Rob Janoff, has said the bite was for scale, so it wouldn't be mistaken for a cherry. He has called the Turing story a nice coincidence."]},
+
+{t:[["In English, orange was the name of the fruit before it was the name of the colour.","Oxford English Dictionary"],
+    ["The word salary comes from the Latin word for salt.","Oxford English Dictionary"]],
+ f:["Posh comes from 'Port Out, Starboard Home', the shady side of a ship to India.","No ticket or shipping document has ever been found using it. The dictionary lists the origin as unknown."]},
+
+{t:[["'Set' has one of the longest entries in the Oxford English Dictionary.","Oxford English Dictionary"],
+    ["Shakespeare's plays contain the first recorded use of well over a thousand English words.","Folger Shakespeare Library"]],
+ f:["Inuit languages have hundreds of separate words for snow.","The claim grew with each retelling from an original observation of about four roots. These languages also build long compound words, so counting 'words' at all is misleading."]},
+
+{t:[["Raindrops aren't teardrop-shaped; falling ones flatten into a bun shape.","NASA"],
+    ["An ordinary fair-weather cumulus cloud weighs hundreds of tonnes.","US Geological Survey"]],
+ f:["It has been scientifically proven that no two snowflakes are alike.","It's a probability argument, not a proof, and in 1988 a researcher found two crystals that appeared identical. Nobody could check every snowflake anyway."]},
+
+{t:[["Caffeine is the most widely used psychoactive drug in the world.","US National Institutes of Health"],
+    ["Decaffeinated coffee still contains a small amount of caffeine.","US Food and Drug Administration"]],
+ f:["Coffee is the second most traded commodity in the world after oil.","Repeated constantly, including by the coffee industry. Actual trade figures put coffee far down the list, below wheat, iron and many others."]},
+
+{t:[["Chocolate is poisonous to dogs because they clear theobromine very slowly.","ASPCA"],
+    ["Cats can't taste sweetness; the gene for the sweet receptor doesn't work in them.","PLOS Genetics, 2005"]],
+ f:["A saucer of cow's milk is a good treat for an adult cat.","Most adult cats are lactose intolerant. The milk gives them stomach upsets, which is why vets advise against it."]},
+
+{t:[["Dogs sweat mainly through their paw pads and cool themselves by panting.","American Kennel Club"],
+    ["A dog's sense of smell is tens of thousands of times more sensitive than a human's.","US National Institutes of Health"]],
+ f:["One dog year equals seven human years.","Dogs age fastest in their first two years, then slow down, and the rate varies a lot by breed and size. The seven-to-one figure was a rough marketing simplification."]},
+
+{t:[["Bats are the only mammals capable of true sustained flight.","Smithsonian Institution"],
+    ["No bat species is blind, and many see better than humans in low light.","Bat Conservation International"]],
+ f:["Camels store water in their humps.","The humps are fat. Camels survive on water carried in their bloodstream and tissues, and by tolerating dehydration far better than we can."]},
+
+{t:[["There are no penguins in the Arctic; all wild penguins live in the southern hemisphere.","WWF"],
+    ["Emperor penguins can dive to depths over 500 metres.","British Antarctic Survey"]],
+ f:["Penguins mate for life.","Some species stay with a partner for years, but many switch between seasons. Fidelity varies enormously depending on the species."]},
+
+{t:[["Everest gains a few millimetres of height a year as the plates beneath it push upward.","2020 joint China-Nepal survey"],
+    ["The Dead Sea's surface is dropping by roughly a metre a year.","Geological Survey of Israel"]],
+ f:["The Great Barrier Reef is the largest living organism on Earth.","It's a structure built by billions of separate coral animals, not one organism. The single-organism title usually goes to a fungus or an aspen grove."]},
+
+{t:[["Tectonic plates move at roughly the speed your fingernails grow.","US Geological Survey"],
+    ["Earth's inner core is solid iron, kept from melting by the pressure on it.","US Geological Survey"]],
+ f:["Earth's magnetic poles have never swapped places.","They've reversed hundreds of times, recorded in the magnetic stripes of ocean floor rock. The last full reversal was around 780,000 years ago."]},
+
+{t:[["Iceland generates almost all of its electricity from hydro and geothermal sources.","National Energy Authority of Iceland"],
+    ["Solar power became the cheapest source of new electricity in many markets by 2020.","International Energy Agency"]],
+ f:["A wind turbine never generates as much energy as it took to build.","Life-cycle studies put the energy payback for a modern turbine at well under a year, against a service life of 20 to 25 years."]},
+
+{t:[["Recycling aluminium uses about 95% less energy than making it from raw ore.","US Environmental Protection Agency"],
+    ["Only around 9% of all plastic ever made has been recycled.","Geyer, Jambeck and Law, Science Advances, 2017"]],
+ f:["The Great Pacific Garbage Patch is a solid floating island of rubbish you could walk on.","It's mostly a diffuse soup of small fragments spread over a huge area, much of it below the surface. There's nothing to stand on."]},
+
+{t:[["The average person's tongue print is as distinctive as a fingerprint, and has been studied for identification.","Journal of Forensic Dental Sciences"],
+    ["The human nose can distinguish far more than the 10,000 odours long claimed; one estimate puts it near a trillion.","Bushdid et al., Science, 2014"]],
+ f:["Your tongue is the strongest muscle in your body.","It isn't one muscle, and it isn't the strongest by any measure. The jaw muscle wins on force, the heart on endurance."]},
+
+{t:[["Cracked heels aside, the skin you shed accounts for a large share of household dust.","American Academy of Dermatology"],
+    ["Hair and nails do not keep growing after death; the skin around them retracts.","BBC Science Focus / forensic pathology"]],
+ f:["Your body completely replaces every one of its cells every seven years.","Some cells turn over in days, but most neurons in the brain and the lenses of your eyes last a lifetime. The seven-year figure is an average that hides all of that."]},
+
+{t:[["A commercial aircraft's cabin air is exchanged completely every few minutes and passed through HEPA filters.","International Air Transport Association"],
+    ["Turbulence has caused very few passenger deaths in modern commercial aviation.","US National Transportation Safety Board"]],
+ f:["The safest seats on a plane are the ones at the back.","Crash data is too varied and too rare to support a rule like this. Different accidents favour different parts of the aircraft."]},
+
+{t:[["Most of the tax revenue lost to error and fraud in benefit systems is dwarfed by the amount lost to unclaimed entitlements in many countries.","National Audit Office, UK"],
+    ["Violent crime rates in the US fell by roughly half between the early 1990s and the late 2010s.","US Bureau of Justice Statistics"]],
+ f:["Crime in most developed countries has risen every year for the past two decades.","Recorded crime has fallen substantially across most of Europe and North America since the 1990s, even though surveys show most people believe the opposite."]},
+
+{t:[["People consistently estimate their country's immigrant population to be far higher than it is.","Ipsos Perils of Perception survey"],
+    ["Fatal shark attacks worldwide typically number in the single digits each year.","International Shark Attack File"]],
+ f:["Sharks kill more people each year than falling coconuts.","Both numbers are tiny, but the coconut figure was invented outright by a press release and has no data behind it at all. It gets cited as if it were a study."]}
+
+];
+
+// ---------- state ----------
+const cardsEl   = document.getElementById('cards');
+const verdictEl = document.getElementById('verdict');
+const vTextEl   = document.getElementById('verdictText');
+const tallyEl   = document.getElementById('tally');
+const roundEl   = document.getElementById('roundNum');
+const nextBtn   = document.getElementById('nextBtn');
+
+const KEYS = ['A','B','C'];
+let right = 0, played = 0, roundNo = 0;
+let answered = false, fakeIdx = 0, deck = [], bag = [];
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+// draw from a shuffled bag so you don't see the same round twice in a row
+function drawRound(){
+  if(!bag.length) bag = shuffle(ROUNDS.map((_,i)=>i));
+  return ROUNDS[bag.pop()];
+}
+
+function newRound(){
+  const r = drawRound();
+  answered = false;
+  roundNo++;
+  roundEl.textContent = 'round ' + roundNo;
+  verdictEl.classList.remove('on');
+  vTextEl.className = '';
+
+  deck = shuffle([
+    {text:r.t[0][0], real:true,  extra:r.t[0][1]},
+    {text:r.t[1][0], real:true,  extra:r.t[1][1]},
+    {text:r.f[0],    real:false, extra:r.f[1]}
+  ]);
+  fakeIdx = deck.findIndex(d=>!d.real);
+
+  cardsEl.innerHTML = '';
+  deck.forEach((d,i)=>{
+    const b = document.createElement('button');
+    b.className = 'claim';
+    b.type = 'button';
+    b.innerHTML = '<span class="key">' + KEYS[i] + '</span><span class="body"></span>';
+    b.querySelector('.body').textContent = d.text;
+    b.addEventListener('click', ()=>pick(i));
+    cardsEl.appendChild(b);
+  });
+}
+window.newRound = newRound;
+
+function pick(i){
+  if(answered) return;
+  answered = true;
+  played++;
+  const won = (i === fakeIdx);
+  if(won) right++;
+
+  const nodes = cardsEl.querySelectorAll('.claim');
+  nodes.forEach((node,n)=>{
+    const d = deck[n];
+    node.classList.add('done', d.real ? 'real' : 'fake');
+    if(n === i) node.classList.add('picked');
+
+    const tag = document.createElement('div');
+    tag.className = 'tagline';
+    tag.textContent = d.real
+      ? (n === i ? 'true — and this is the one you picked' : 'true')
+      : (n === i ? 'made up — you found it' : 'made up');
+
+    const after = document.createElement('div');
+    after.className = 'after';
+    if(d.real){
+      const em = document.createElement('em');
+      em.textContent = 'source: ' + d.extra;
+      after.appendChild(em);
+    } else {
+      after.textContent = d.extra;
+    }
+    node.appendChild(tag);
+    node.appendChild(after);
+  });
+
+  vTextEl.textContent = won ? 'Right. That one was invented.'
+                            : 'Wrong. The fake was ' + KEYS[fakeIdx] + '.';
+  vTextEl.className = won ? 'win' : 'lose';
+  tallyEl.textContent = right + ' right / ' + played + ' played';
+  verdictEl.classList.add('on');
+}
+
+nextBtn.addEventListener('click', newRound);
+newRound();
+})();
+
+// ---------- says who? (the walking game) ----------
 (function(){
 const cv = document.getElementById('gameCanvas');
 const cx = cv.getContext('2d');
@@ -1293,134 +1629,6 @@ function loop(){
 }
 draw();
 loop();
-})();
-
-// ---------- claim checker ----------
-(function(){
-const checkBtn   = document.getElementById('checkBtn');
-const claimInput = document.getElementById('claimInput');
-const sourceInput= document.getElementById('sourceInput');
-const status     = document.getElementById('calcStatus');
-const resultBox  = document.getElementById('calcResult');
-const scoreNum   = document.getElementById('scoreNum');
-const scoreLabel = document.getElementById('scoreLabel');
-const whyText    = document.getElementById('whyText');
-const meterFill  = document.getElementById('meterFill');
-const factorList = document.getElementById('factorList');
-
-// The seven factors and how much each one counts toward the overall score.
-// Weights add up to 100. Source reliability weighs the most because a claim
-// is only as good as where it comes from.
-const FACTORS = [
-  {key:'source_reliability', name:'Source reliability',    weight:25},
-  {key:'sample_size',        name:'Sample size',           weight:15},
-  {key:'sampling_bias',      name:'Sampling bias',         weight:15},
-  {key:'misleading',         name:'Misleading framing',    weight:15},
-  {key:'confounding',        name:'Confounding variables', weight:10},
-  {key:'replicability',      name:'Replicability',         weight:10},
-  {key:'math_check',         name:'Math & consistency',    weight:10},
-];
-
-function meterColor(s){
-  return s>=70 ? '#2e7d32' : (s>=40 ? '#c78a2b' : '#c0392b');
-}
-
-checkBtn.addEventListener('click', async ()=>{
-  const claim  = claimInput.value.trim();
-  const source = sourceInput.value.trim();
-
-  if(!claim){
-    status.textContent = 'Type in a claim first.';
-    return;
-  }
-
-  checkBtn.disabled = true;
-  resultBox.style.display = 'none';
-  status.textContent = 'Checking. This usually takes 10 to 30 seconds.';
-
-  const sourceLine = source
-    ? 'They also gave this source link: ' + source + '\nUse that specific source as the basis for EVERY factor below, including source reliability (who publishes it, is it trustworthy, does it actually support the claim as written).\n\n'
-    : 'No source link was given. For the source reliability factor, judge the main sources where this claim actually comes from or circulates.\n\n';
-
-  const prompt =
-    'Someone wants to know how accurate this claim or statistic is:\n\n"' + claim + '"\n\n' +
-    sourceLine +
-    'Use web search to verify. Then grade the claim on these seven factors, each scored 0 to 100 (100 = no problems at all on that factor, 0 = completely fails it):\n' +
-    '- source_reliability: how trustworthy is the source behind the claim\n' +
-    '- sample_size: was the underlying data based on enough people or cases\n' +
-    '- sampling_bias: did the people or cases studied fairly represent the group the claim is about\n' +
-    '- misleading: is the claim framed, worded, or charted in a way that exaggerates or distorts what the data shows\n' +
-    '- confounding: could other variables explain the result that the claim ignores\n' +
-    '- replicability: have other studies or sources found the same thing\n' +
-    '- math_check: are the numbers calculated and reported correctly (percentages, base rates, comparisons)\n\n' +
-    'If a factor cannot be fully judged from available info, score it on what is known and say so in the note.\n\n' +
-    'Respond with ONLY a raw JSON object. No markdown, no backticks, no text before or after. Exact shape:\n' +
-    '{"label": "<a 3 to 6 word overall verdict>", "summary": "<2 to 4 short sentences in plain simple language: is the claim accurate, and if it is a distorted version of something true, what is the real version>", "factors": {"source_reliability": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "sample_size": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "sampling_bias": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "misleading": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "confounding": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "replicability": {"score": <0-100>, "note": "<1-2 plain sentences>"}, "math_check": {"score": <0-100>, "note": "<1-2 plain sentences>"}}}';
-
-  try{
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1500,
-        messages:[{role:'user', content: prompt}],
-        tools:[{type:'web_search_20250305', name:'web_search'}]
-      })
-    });
-    const data = await response.json();
-
-    const text = (data.content||[])
-      .filter(b=>b.type==='text')
-      .map(b=>b.text)
-      .join('\n');
-
-    const clean = text.replace(/```json|```/g,'').trim();
-    const jsonStart = clean.indexOf('{');
-    const jsonEnd = clean.lastIndexOf('}');
-    const parsed = JSON.parse(clean.slice(jsonStart, jsonEnd+1));
-
-    // build the factor rows and compute the weighted overall score ourselves,
-    // so the math on screen always adds up
-    factorList.innerHTML = '';
-    let weighted = 0, totalW = 0;
-
-    for(const f of FACTORS){
-      const raw = parsed.factors && parsed.factors[f.key] ? parsed.factors[f.key] : {score:50, note:'Could not be judged from available info.'};
-      const s = Math.max(0, Math.min(100, Math.round(raw.score)));
-      weighted += s * f.weight;
-      totalW  += f.weight;
-
-      const row = document.createElement('div');
-      row.className = 'factor';
-      row.innerHTML =
-        '<div class="frow">' +
-          '<span class="fname">' + f.name + '</span>' +
-          '<span class="fweight">weight: ' + f.weight + '%</span>' +
-          '<span class="fscore">' + s + '/100</span>' +
-        '</div>' +
-        '<div class="fmeter"><div style="width:' + s + '%; background:' + meterColor(s) + ';"></div></div>' +
-        '<div class="fnote"></div>';
-      row.querySelector('.fnote').textContent = raw.note || '';
-      factorList.appendChild(row);
-    }
-
-    const overall = Math.round(weighted / totalW);
-    scoreNum.textContent = overall;
-    meterFill.style.width = overall + '%';
-    meterFill.style.background = meterColor(overall);
-    scoreLabel.textContent = parsed.label || '';
-    whyText.textContent = parsed.summary || '';
-
-    status.textContent = '';
-    resultBox.style.display = 'block';
-  }catch(err){
-    console.error(err);
-    status.textContent = 'Something went wrong on our end. Give it another try in a bit.';
-  }finally{
-    checkBtn.disabled = false;
-  }
-});
 })();
 </script>
 </body>
