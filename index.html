@@ -353,7 +353,7 @@
 
 <div class="page on" id="home">
   <h1 class="display">Two of these are true</h1>
-  <p class="lede">One of them was made up. Pick the one you think is the fake.</p>
+  <p class="lede">One was made up. All three are the kind of thing you might act on. Pick the fake.</p>
 
   <div id="roundLine">
     <span id="roundNum">round 1</span>
@@ -367,7 +367,7 @@
     <button class="quiet" id="nextBtn">Next three</button>
   </div>
 
-  <p id="closer"></p>
+  <p id="closer">Notice how little the fake had to change to pass. That's the trick: a false claim borrows the shape of a true one — a plausible source, a confident number, a rule that sounds like it must exist. The cost isn't being wrong in a quiz. It's the decision you make afterwards.</p>
 </div>
 
 <div class="page" id="game">
@@ -627,261 +627,254 @@ document.querySelectorAll('nav a').forEach(a=>{
 (function(){
 
 // Each entry: two claims that are true (with where to check them), and one
-// that was written to sound exactly like them but isn't.
+// that was written to sound exactly like them but isn't. The fakes are all
+// things that would change what you actually do if you believed them.
 // t: [[claim, source], [claim, source]]   f: [claim, what's actually true]
 const ROUNDS = [
 
-{t:[["Honey recovered from ancient Egyptian tombs was still unspoiled thousands of years later.","Smithsonian Magazine"],
-    ["The Eiffel Tower can stand about 15 cm taller in summer, because its iron expands in the heat.","Société d'Exploitation de la Tour Eiffel"]],
- f:["A single strand of human hair can hold up to 100 kg before it snaps.","A single strand holds roughly 100 grams. A whole head of hair could hold a couple of tons, which is where the confusion comes from."]},
+{t:[["Checking your own credit report is a soft inquiry and does not lower your score.","US Consumer Financial Protection Bureau"],
+    ["If you dispute an error on your credit report, the bureau has to investigate it, usually within 30 days.","Fair Credit Reporting Act"]],
+ f:["Closing a credit card you never use will raise your score, because it lowers your risk.","Closing it usually drops your score. Your total available credit falls, so the share you're using goes up, and you can lose the account's age from your history."]},
 
-{t:[["Octopuses have three hearts, and their blood is blue because it carries oxygen with copper instead of iron.","Natural History Museum, London"],
-    ["Bananas are very slightly radioactive, because of the potassium-40 they contain.","US Nuclear Regulatory Commission"]],
- f:["A goldfish's memory lasts about three seconds.","Goldfish have been trained to remember tasks for months. The three-second line has no study behind it."]},
+{t:[["Carrying a balance costs you interest and does not build your score any faster than paying in full.","US Consumer Financial Protection Bureau"],
+    ["Rate-shopping for a mortgage or car loan within a short window counts as a single inquiry, not several.","US Consumer Financial Protection Bureau"]],
+ f:["You need to carry a small balance month to month for the card to report activity.","Your issuer reports the account whether or not you carry a balance. Paying in full still builds history — it just doesn't pay them any interest."]},
 
-{t:[["Wombats produce cube-shaped droppings, made by uneven stiffness in the walls of their intestines.","Ig Nobel Prize 2019, Georgia Tech study"],
-    ["There are more possible chess games than there are atoms in the observable universe.","Claude Shannon, 1950"]],
- f:["Humans only use about 10% of their brains.","Brain imaging shows nearly every region does something over the course of a day. Damage to almost any part of the brain causes problems."]},
+{t:[["FDIC insurance covers up to $250,000 per depositor, per insured bank, per ownership category, and it's automatic.","US Federal Deposit Insurance Corporation"],
+    ["Banks have to get your opt-in before charging overdraft fees on debit card and ATM transactions.","US Federal Reserve Regulation E"]],
+ f:["Overdraft protection is a legal requirement, so your bank has to cover a purchase that takes you negative.","It's an opt-in service. If you haven't opted in, the card is simply declined — which is usually cheaper than the fee."]},
 
-{t:[["Sharks are older than trees. Sharks appeared around 450 million years ago; the first trees around 390 million.","American Museum of Natural History"],
-    ["Cleopatra lived closer in time to the Moon landing than to the building of the Great Pyramid of Giza.","Pyramid c. 2560 BC, Cleopatra died 30 BC, Apollo 11 in 1969"]],
- f:["Viking warriors wore horned helmets into battle.","Not one horned helmet has been found in a Viking grave. The look was invented by a costume designer for a Wagner opera in 1876."]},
+{t:[["Over long periods, most actively managed US stock funds have trailed the index they're measured against.","S&P Dow Jones SPIVA Scorecard"],
+    ["A fund's expense ratio comes out of your returns every year, whether the fund gains or loses.","US Securities and Exchange Commission"]],
+ f:["Anyone calling themselves a financial advisor is legally required to put your interests first.","Only some are held to a fiduciary duty. Others work to a lower standard that still allows steering you toward products that pay them more. You can ask, in writing, whether they're a fiduciary."]},
 
-{t:[["Lightning strikes somewhere on Earth roughly 100 times every second.","NOAA"],
-    ["The Sahara was green grassland dotted with lakes about 6,000 years ago.","NASA Earth Observatory"]],
- f:["You lose most of your body heat through your head.","Your head is about 10% of your surface area and loses roughly 10% of your heat. The claim traces to a badly designed army test where subjects wore everything except a hat."]},
+{t:[["The IRS starts contact by mail. It does not call demanding immediate payment or threatening arrest.","US Internal Revenue Service"],
+    ["No real government agency or utility asks to be paid in gift cards.","US Federal Trade Commission"]],
+ f:["Once a check clears and the money shows in your account, the funds are confirmed and safe to spend.","Banks make funds available in a few days, but a forged or bounced check can be reversed weeks later — and the money comes back out of your account."]},
 
-{t:[["A day on Venus is longer than a year on Venus.","NASA"],
-    ["The summit of Chimborazo in Ecuador, not Everest, is the point on Earth's surface farthest from the planet's centre.","NOAA"]],
- f:["Mercury is the hottest planet in the solar system, because it is closest to the Sun.","Venus is hotter, at around 465°C, because its thick carbon dioxide atmosphere traps heat. Mercury has almost no atmosphere."]},
+{t:[["A manufacturer generally can't void your warranty just because you used third-party parts or an independent repair shop.","Magnuson-Moss Warranty Act, US Federal Trade Commission"],
+    ["The FTC has warned companies that 'warranty void if seal is broken' stickers are deceptive.","US Federal Trade Commission"]],
+ f:["Stores are legally required to take returns within 30 days of purchase.","No federal law requires stores to accept returns at all. Every return window is store policy, which is why it varies and why it can change."]},
 
-{t:[["A king penguin named Nils Olav holds a rank in the Norwegian King's Guard and has been knighted.","Edinburgh Zoo / Norwegian King's Guard"],
-    ["The dot over a lowercase i or j has a name: it's called a tittle.","Oxford English Dictionary"]],
- f:["Bulls charge at the colour red because it enrages them.","Cattle are red-green colourblind. The bull is reacting to the movement of the cape, not its colour."]},
+{t:[["Under EU rules, passengers can be owed cash compensation for long delays and cancellations inside the airline's control.","EU Regulation 261/2004"],
+    ["If a US airline cancels your flight and you don't take the alternative, you're owed a refund to your original payment method, not a voucher.","US Department of Transportation"]],
+ f:["A weather delay still entitles you to compensation, since the airline sold you the ticket.","Weather counts as an extraordinary circumstance and is excluded from compensation. You're still owed rebooking and care, but not the payout."]},
 
-{t:[["Scotland's official national animal is the unicorn.","Royal Arms of Scotland"],
-    ["Oxford University was teaching students before the Aztec city of Tenochtitlan was founded.","Oxford from 1096; Tenochtitlan founded 1325"]],
- f:["The Great Wall of China is the only human-made object visible from the Moon with the naked eye.","It isn't visible from the Moon at all, and it's barely detectable from low Earth orbit. It's narrow and the same colour as the ground around it."]},
+{t:[["Your car insurance generally follows the car, not the driver, in most US states.","Insurance Information Institute"],
+    ["Standard homeowners insurance does not cover flood damage; that's a separate policy.","US Federal Emergency Management Agency"]],
+ f:["If you lend your car to a friend and they crash it, their insurance pays because they were driving.","Your policy is usually the first to pay, and the claim can go on your record and raise your rates. Lending the keys lends the coverage."]},
 
-{t:[["Under some conditions hot water freezes faster than cold water, an effect named after a Tanzanian schoolboy.","Royal Society of Chemistry"],
-    ["Antarctica is the largest desert on Earth, because a desert is defined by rainfall, not heat.","British Antarctic Survey"]],
- f:["Glass is a very slow-moving liquid, which is why old cathedral windows are thicker at the bottom.","Glass is an amorphous solid and does not flow at room temperature. Old panes vary in thickness because of how they were made."]},
+{t:[["A raise into a higher tax bracket only taxes the income above that threshold at the higher rate.","US Internal Revenue Service"],
+    ["You can file a return to claim a refund even in a year when you weren't required to file.","US Internal Revenue Service"]],
+ f:["Turning down a raise can leave you with less take-home pay if it bumps you up a bracket.","Brackets are marginal. Only the dollars above the line are taxed at the higher rate, so a raise always leaves you with more."]},
 
-{t:[["Humans and chimpanzees share roughly 98.8% of their DNA.","Smithsonian Institution"],
-    ["Your body contains roughly as many bacterial cells as human cells.","Sender, Fuchs and Milo, PLOS Biology, 2016"]],
- f:["Different parts of the tongue detect sweet, salty, sour and bitter separately.","The tongue map came from a mistranslation of a 1901 German paper. All taste types are detected across the whole tongue."]},
+{t:[["Most conventional loans let you drop private mortgage insurance once you reach enough equity.","Homeowners Protection Act, US Consumer Financial Protection Bureau"],
+    ["Lenders have to give you a standardized Loan Estimate so you can compare offers side by side.","US Consumer Financial Protection Bureau"]],
+ f:["You need a 20% down payment to buy a house.","Plenty of loan programs go far below that. Twenty percent avoids mortgage insurance, which is a cost question, not an eligibility one."]},
 
-{t:[["Koala fingerprints are so similar to human ones that they have been confused at crime scenes.","University of Adelaide"],
-    ["Sea otters sometimes hold hands while resting so they don't drift apart.","Vancouver Aquarium"]],
- f:["Ostriches bury their heads in the sand when they're frightened.","They lower their heads to turn their eggs or to eat grit, which looks like burying from a distance. An ostrich that panics runs, or kicks."]},
+{t:[["In most US states, a landlord has a set number of days to return your deposit or send an itemized list of deductions.","state landlord-tenant statutes"],
+    ["Your landlord's insurance covers the building, not your belongings. That's what renters insurance is for.","Insurance Information Institute"]],
+ f:["If your landlord won't make a repair, you can legally stop paying rent until they do.","Almost everywhere there's a required process first — written notice, escrow, or repair-and-deduct. Simply withholding rent is one of the fastest routes to an eviction filing."]},
 
-{t:[["The shortest war on record lasted under an hour: the Anglo-Zanzibar War of 1896.","Guinness World Records"],
-    ["Alaska has more coastline than every other US state put together.","NOAA"]],
- f:["Napoleon Bonaparte was unusually short for his time.","He was about 1.68 m, average for a Frenchman then. The myth comes from French inches being longer than English ones, plus British wartime cartoons."]},
+{t:[["Under the National Labor Relations Act, most private-sector employees are protected when they discuss pay with coworkers.","US National Labor Relations Board"],
+    ["Several US states now require employers to list a pay range in job postings.","state pay transparency laws"]],
+ f:["If your contract says salaries are confidential, discussing your pay is a fireable offense.","For most private-sector workers it's the policy that's unlawful, not the conversation. That clause generally can't be enforced."]},
 
-{t:[["Ada Lovelace wrote what is generally considered the first computer algorithm, in 1843.","Computer History Museum"],
-    ["Microwave ovens, Wi-Fi and Bluetooth all share the same 2.4 GHz band.","US Federal Communications Commission"]],
- f:["Water drains the opposite way in the Southern Hemisphere because of the Coriolis effect.","The Coriolis force is far too weak to steer a sink. The shape of the basin and how the water entered decide the direction."]},
+{t:[["Most non-exempt US employees are owed overtime for hours past 40 in a week, regardless of job title.","Fair Labor Standards Act"],
+    ["Being paid a salary does not by itself make you exempt from overtime.","US Department of Labor"]],
+ f:["A non-compete you signed is binding, so you can't take a job with a competitor.","Enforceability varies enormously by state. Some ban them for most workers, and courts frequently narrow or throw out broad ones."]},
 
-{t:[["Honeybees can be trained to recognise individual human faces.","Journal of Experimental Biology, 2005"],
-    ["Cows form close bonds with particular herd-mates and show stress when separated from them.","University of Northampton, 2011"]],
- f:["A duck's quack doesn't echo.","An acoustics team at the University of Salford tested this in 2003. It echoes. The echo is just quiet and blends into the fading quack."]},
+{t:[["The No Surprises Act limits surprise out-of-network bills for emergency care in the US.","US Centers for Medicare & Medicaid Services"],
+    ["Paid medical collections are removed from US credit reports, and small medical debts are no longer reported.","the three national credit bureaus, 2022–2023"]],
+ f:["Once a medical bill goes to collections, your only option is to pay it as billed.","Medical bills are routinely wrong. You can request an itemized bill, dispute charges, and negotiate — hospitals often have financial assistance policies they don't advertise."]},
 
-{t:[["Venus rotates in the opposite direction to almost every other planet in the solar system.","NASA"],
-    ["Saturn is less dense than water, so in a big enough ocean it would float.","NASA"]],
- f:["One side of the Moon is permanently dark and never sees sunlight.","Every part of the Moon gets sunlight. One side permanently faces away from us, which is why it's called the far side, not the dark side."]},
+{t:[["Police in the US are legally allowed to lie to a suspect during questioning.","US Supreme Court precedent"],
+    ["Miranda warnings are only required before custodial interrogation, not at every arrest.","Miranda v. Arizona"]],
+ f:["If the police don't read you your rights, the case gets thrown out.","It can make what you said inadmissible. It does not void the arrest, and a case built on other evidence goes ahead."]},
 
-{t:[["The US Supreme Court ruled in 1893 that tomatoes count as vegetables for tax purposes.","Nix v. Hedden, US Supreme Court"],
-    ["Peanuts are legumes and grow underground, so they aren't nuts at all.","US Department of Agriculture"]],
- f:["Carrots are orange because Dutch growers bred them that way to honour the House of Orange.","A popular story with no contemporary evidence behind it. Orange carrots existed before the Dutch connection is supposed to have started."]},
+{t:[["There is no waiting period to report a person missing in the US.","US Federal Bureau of Investigation"],
+    ["You can dial 911 from a mobile phone with no active service plan.","US Federal Communications Commission"]],
+ f:["You have to wait 24 hours before the police will take a missing person report.","This comes from television. The first hours matter most in a search, and departments are supposed to take the report immediately."]},
 
-{t:[["The Pacific Ocean holds around half of all the free water on Earth.","NOAA"],
-    ["The Dead Sea is close to ten times saltier than ordinary seawater.","US Geological Survey"]],
- f:["The ocean looks blue because it reflects the colour of the sky.","Water itself absorbs red and orange light more than blue, so blue is what's left to scatter back. It stays blue under a grey sky."]},
+{t:[["If your car goes into water, the guidance is to get out immediately: belt off, window down or broken, children out first.","US National Highway Traffic Safety Administration"],
+    ["Most car doors can't be pushed open underwater until pressure equalizes, which is why the window is the exit.","vehicle-submersion research, University of Manitoba"]],
+ f:["You should wait for the cabin to fill with water so the pressure equalizes, then open the door.","Waiting is how people drown. You have roughly a minute of floating time, and that's the window to get out through the window."]},
 
-{t:[["Sound travels about four times faster through water than through air.","NOAA"],
-    ["The 1883 eruption of Krakatoa was heard nearly 5,000 km away, the loudest sound in recorded history.","Smithsonian Institution"]],
- f:["Lightning never strikes the same place twice.","The Empire State Building is struck around 20 to 25 times a year. Tall, isolated, conductive things get hit repeatedly."]},
+{t:[["A hard-topped vehicle or a building is the safe place in a lightning storm.","US National Oceanic and Atmospheric Administration"],
+    ["If you can hear thunder, you're already close enough to be struck.","US National Oceanic and Atmospheric Administration"]],
+ f:["Sheltering under a tall tree keeps you safer than standing in the open.","Trees are one of the most dangerous places to be. Lightning strikes the tree and jumps to you through the ground or the trunk."]},
 
-{t:[["There are roughly three trillion trees on Earth, far more than there are stars in the Milky Way.","Crowther et al., Nature, 2015"],
-    ["A teaspoon of neutron star material would weigh about a billion tons.","NASA"]],
- f:["The Amazon rainforest produces 20% of the world's oxygen.","The forest consumes almost as much oxygen as it makes through respiration and decay. Its net contribution is close to zero. Most oxygen comes from ocean plankton."]},
+{t:[["Drop, cover and hold on is the recommended response to an earthquake in the US, not running outside.","US Geological Survey and FEMA"],
+    ["There is still no reliable way to predict an earthquake days in advance.","US Geological Survey"]],
+ f:["A doorway is the safest place to stand during an earthquake.","That advice came from old adobe houses where the frame was the strongest part. In a modern building a doorway is no stronger than the wall, and the door can swing into you."]},
 
-{t:[["Iceland has no native mosquito population, unlike its neighbours.","Icelandic Institute of Natural History"],
-    ["Finland has more saunas than it has cars.","Finnish Sauna Society"]],
- f:["Norway has the longest coastline of any country in the world.","Canada's is longer. Norway's ranks second and only climbs that high when you count every fjord and island."]},
+{t:[["Most home fire deaths happen in homes with no working smoke alarm.","US National Fire Protection Association"],
+    ["Smoke alarms should be replaced roughly every ten years even if the test button still works.","US Fire Administration"]],
+ f:["Water is fine on a stovetop grease fire as long as you use enough of it.","Water hits the hot oil, flashes to steam and throws burning grease into the air. Cut the heat and cover the pan, or use an extinguisher rated for it."]},
 
-{t:[["The Bluetooth logo is a combination of the runes for the initials of a 10th-century Danish king.","Bluetooth SIG"],
-    ["In Italian, the @ symbol is called a chiocciola, meaning snail.","Accademia della Crusca"]],
- f:["The QWERTY keyboard was designed to slow typists down so machines wouldn't jam.","It was designed to stop common letter pairs hitting the same spot at once, which lets you type faster, not slower."]},
+{t:[["Lint buildup is a leading cause of home dryer fires.","US National Fire Protection Association"],
+    ["Mixing bleach with ammonia-based cleaners produces toxic chloramine gas.","US Centers for Disease Control and Prevention"]],
+ f:["Adding vinegar to bleach makes a stronger disinfectant for cleaning.","It makes chlorine gas. Bleach is meant to be diluted with plain water, and mixing it with any acid is dangerous in an enclosed room."]},
 
-{t:[["A blue whale calf can gain around 90 kg a day while nursing.","NOAA Fisheries"],
-    ["A blue whale's heart is roughly the size of a small car.","Royal Ontario Museum"]],
- f:["Whales spray stored seawater out of their blowholes.","That plume is warm, moist air from the lungs condensing when it hits colder outside air. Whales don't hold water to spout."]},
+{t:[["Carbon monoxide has no smell or colour, which is why detectors exist.","US Consumer Product Safety Commission"],
+    ["Running a generator in a garage, even with the door open, can build lethal carbon monoxide levels.","US Consumer Product Safety Commission"]],
+ f:["You'd notice carbon monoxide poisoning starting, because the fumes smell like exhaust.","The gas itself is odourless. Early symptoms feel like a headache or flu, which is why people go to sleep through it."]},
 
-{t:[["Nepal's flag is the only national flag that isn't a rectangle.","Government of Nepal"],
-    ["Antarctica has no time zone of its own; research stations use whichever one suits them.","British Antarctic Survey"]],
- f:["The Canary Islands are named after the canary birds that live there.","The islands were named first, from the Latin for dogs. The birds were then named after the islands."]},
+{t:[["Cool a minor burn under cool running water for about 20 minutes.","UK National Health Service"],
+    ["A burn that blisters widely, or covers a large area, needs medical attention rather than home care.","American Burn Association"]],
+ f:["Butter or ice on a fresh burn cools it down and soothes the skin.","Butter traps the heat in, and ice can damage the tissue further. Cool running water is the actual first step."]},
 
-{t:[["Coca-Cola originally contained an extract of coca leaf, which was removed by the early 1900s.","Smithsonian Magazine"],
-    ["7 Up contained lithium citrate, a mood stabiliser, until 1948.","Smithsonian Magazine"]],
- f:["Absinthe causes hallucinations because of a compound called thujone.","Tests on original bottles found thujone levels far too low to do anything. What people were experiencing was extremely strong alcohol."]},
+{t:[["For a nosebleed, lean forward and pinch the soft part of the nose for around ten minutes.","UK National Health Service"],
+    ["For a suspected stroke, note when symptoms started — treatment options depend on that time.","American Stroke Association"]],
+ f:["Tilt your head back during a nosebleed so it drains and clots faster.","It sends blood down your throat, which can make you vomit and hides how much you're actually losing. Lean forward."]},
 
-{t:[["The marathon winner at the 1904 Olympics was disqualified for riding part of the course in a car.","International Olympic Committee"],
-    ["The modern marathon distance was fixed at the 1908 London Games, partly to suit the royal viewing box.","World Athletics"]],
- f:["A marathon is 26.2 miles because that's the exact distance from Marathon to Athens.","That route is closer to 25 miles, and early Olympic marathons varied in length. The 26.2 figure was set in 1908 and made standard afterwards."]},
+{t:[["Hands-only CPR is what untrained bystanders are told to do for an adult who collapses.","American Heart Association"],
+    ["Cardiac arrest survival drops sharply for every minute without compressions.","American Heart Association"]],
+ f:["You should check for a pulse first, and not start CPR unless you're sure there isn't one.","Bystanders are told to skip the pulse check. Unresponsive and not breathing normally is enough to start. Hesitating costs more than compressing a beating heart does."]},
 
-{t:[["More than half the world's population now lives in urban areas, a line crossed around 2007.","UN Department of Economic and Social Affairs"],
-    ["Roughly a quarter of the world's population is under 15 years old.","UN World Population Prospects"]],
- f:["Half the world's population has never made a phone call.","This was already shaky when it circulated in the 1990s, and mobile subscriptions now outnumber people. It gets repeated anyway."]},
+{t:[["Antibiotics do nothing for colds and flu, which are viral.","US Centers for Disease Control and Prevention"],
+    ["Antibiotic resistance is listed by the WHO among the top global public health threats.","World Health Organization"]],
+ f:["Saving leftover antibiotics for the next time you get sick is a reasonable way to avoid a doctor's visit.","The leftover course is the wrong drug or wrong dose for the next infection as often as not, and partial dosing is exactly how resistance builds. Ask the prescriber, don't self-prescribe."]},
 
-{t:[["Global extreme poverty fell from around 36% of the world in 1990 to under 10% by 2015.","World Bank"],
-    ["Average life expectancy worldwide has roughly doubled since 1900.","World Health Organization"]],
- f:["The average person swallows eight spiders a year while asleep.","This was invented as a demonstration of how quickly a fake fact spreads online. Spiders avoid a breathing, vibrating human."]},
+{t:[["Grapefruit juice interferes with the absorption of a number of common prescription drugs.","US Food and Drug Administration"],
+    ["Acetaminophen appears in many combination cold and flu remedies, so doubling up can quietly exceed the safe daily limit.","US Food and Drug Administration"]],
+ f:["Over-the-counter medicines can't seriously interact with each other, or they wouldn't be sold without a prescription.","They interact plenty. The most common accidental overdose in this category is people taking a cold remedy and a separate painkiller that share the same active ingredient."]},
 
-{t:[["An adult heart beats around 100,000 times a day.","American Heart Association"],
-    ["Your body replaces on the order of hundreds of billions of cells every day.","Sender and Milo, PNAS, 2021"]],
- f:["Swallowed chewing gum stays in your stomach for seven years.","It isn't digested, but it doesn't stick around either. It passes through with everything else in a matter of days."]},
+{t:[["In the US, dietary supplements do not need FDA approval for safety or effectiveness before they go on sale.","US Food and Drug Administration"],
+    ["St John's wort reduces the effectiveness of a long list of prescription drugs, including some contraceptives.","US National Institutes of Health"]],
+ f:["Supplements are independently tested for purity and dose before they reach the shelf.","Testing is left to the manufacturer. Independent analyses regularly find products with less, more, or something other than what's on the label."]},
 
-{t:[["Around 10% of people are left-handed, and the figure has stayed steady across cultures.","Papadatou-Pastou et al., Psychological Bulletin, 2020"],
-    ["O negative is the universal red cell donor type, which is why it's used in emergencies.","American Red Cross"]],
- f:["Cracking your knuckles causes arthritis.","Studies have found no link. One doctor cracked the knuckles on only one hand for over 60 years and found no difference between them."]},
+{t:[["The injected flu vaccine contains no live virus and cannot give you flu.","US Centers for Disease Control and Prevention"],
+    ["The 1998 paper linking MMR to autism was retracted and its lead author lost his medical licence.","The Lancet retraction; UK General Medical Council"]],
+ f:["If you're young and healthy you don't need a flu shot, since you'd shake it off anyway.","Healthy adults are hospitalized by flu every year, and vaccination also cuts how much you pass on to people who can't shake it off."]},
 
-{t:[["For most people, vitamin C supplements don't prevent colds.","Cochrane Review"],
-    ["Antibiotics do nothing against a cold or flu, because those are viral.","US Centers for Disease Control and Prevention"]],
- f:["Everyone needs eight glasses of water a day.","No study established that number. Needs vary by body, climate and activity, and food and other drinks count towards it."]},
+{t:[["High blood pressure usually has no symptoms at all, which is why it goes undetected.","American Heart Association"],
+    ["Sudden face droop, arm weakness or slurred speech means calling emergency services immediately, not waiting to see if it passes.","American Stroke Association"]],
+ f:["If you felt fine at your last check-up, you can skip blood pressure monitoring for a few years.","Feeling fine is the normal experience of high blood pressure. Readings also vary a lot day to day, which is why one normal number isn't an all-clear."]},
 
-{t:[["Sugar has not been shown to cause hyperactivity in children.","Wolraich et al., JAMA, 1995"],
-    ["Reading in dim light strains your eyes temporarily but doesn't damage them.","American Academy of Ophthalmology"]],
- f:["Shaving makes hair grow back thicker and darker.","Shaving cuts the hair at its widest point and leaves a blunt tip, which feels coarser. Growth rate, colour and thickness don't change."]},
+{t:[["SPF 50 blocks roughly 98% of UVB and SPF 30 roughly 97% — the numbers are not proportional.","American Academy of Dermatology"],
+    ["UVA passes through window glass, so you get sun exposure while driving.","Skin Cancer Foundation"]],
+ f:["A high enough SPF lasts the whole day, so one morning application is enough.","SPF measures strength, not duration. It rubs and sweats off, and testing uses far more product than most people actually apply."]},
 
-{t:[["Fever is part of the body's immune response, not something the infection does to you directly.","US National Institutes of Health"],
-    ["Only about 2% of the human genome codes for proteins.","National Human Genome Research Institute"]],
- f:["Every cell in your body carries your full set of 46 chromosomes.","Mature red blood cells have no nucleus and carry no chromosomes at all. Egg and sperm cells carry 23."]},
+{t:[["Alcohol helps you fall asleep faster but breaks up the second half of the night.","US National Institutes of Health"],
+    ["Caffeine has a half-life of about five hours, so an afternoon coffee is still working at bedtime.","US National Institutes of Health"]],
+ f:["Sleeping in on the weekend clears the sleep debt you built up during the week.","It recovers some alertness, but studies tracking metabolic markers found the weekend catch-up didn't undo the week's effects. The rhythm shift can also make Monday worse."]},
 
-{t:[["The placebo effect can still work when people are openly told they're taking a placebo.","Kaptchuk et al., Beth Israel Deaconess / Harvard"],
-    ["The word placebo is Latin for 'I shall please'.","Oxford English Dictionary"]],
- f:["Personality tests like the Myers-Briggs sort people into 16 stable, reliable types.","Around half of people get a different type when they retake it a few weeks later. Psychologists don't find evidence for discrete types."]},
+{t:[["Coffee does not sober anyone up. It makes an impaired person alert and still impaired.","US Centers for Disease Control and Prevention"],
+    ["Blood alcohol keeps rising for a while after the last drink, so you can be more impaired than when you stopped.","US National Institute on Alcohol Abuse and Alcoholism"]],
+ f:["A cold shower, a big meal and an hour will bring you back under the limit.","Only time metabolizes alcohol, at a rate you can't speed up. Everything else just changes how awake you feel while your blood alcohol stays where it is."]},
 
-{t:[["Polygraph results are inadmissible in most US courts.","American Psychological Association"],
-    ["Handwriting analysis has no demonstrated ability to predict job performance.","British Psychological Society"]],
- f:["People are either left-brained and logical or right-brained and creative.","A scan of over 1,000 brains found no evidence that people favour one hemisphere. Both sides work together on nearly everything."]},
+{t:[["Hands-free phone calls still measurably impair driving; the distraction is cognitive, not manual.","US National Safety Council"],
+    ["At highway speed, a two-second glance away covers roughly the length of a football field.","US National Highway Traffic Safety Administration"]],
+ f:["Using your phone at a red light doesn't count as distracted driving.","In many places it's still illegal, and the bigger issue is the lag: attention takes several seconds to come back after you look up."]},
 
-{t:[["The original 'Mozart effect' study found a small, short-lived boost on one spatial task, not a lasting IQ gain.","Rauscher, Shaw and Ky, Nature, 1993"],
-    ["Teaching to a student's 'learning style' has not been shown to improve results.","Pashler et al., Psychological Science in the Public Interest, 2008"]],
- f:["The average human attention span has fallen to eight seconds, less than a goldfish.","This traces to a marketing summary that cited a source that never made the claim. No study measured a general human attention span dropping."]},
+{t:[["Underinflated tyres cut fuel economy and raise the risk of a blowout.","US National Highway Traffic Safety Administration"],
+    ["Many modern cars have oil change intervals far longer than 3,000 miles; the manual is the authority, not the sticker.","US Federal Trade Commission"]],
+ f:["Premium petrol gives you better mileage and a cleaner engine in any car.","If your engine isn't built for high octane, you get nothing for the extra money. The requirement is printed in the manual and usually on the fuel door."]},
+
+{t:[["Cars heat to dangerous temperatures within minutes, even in mild weather and with the windows cracked.","US National Highway Traffic Safety Administration"],
+    ["Heat exhaustion can progress to heat stroke, which is a medical emergency.","US Centers for Disease Control and Prevention"]],
+ f:["If you stop sweating in extreme heat, your body has adjusted to the temperature.","Sweating stopping is a warning sign of heat stroke, not adaptation. Hot dry skin and confusion mean emergency help now."]},
+
+{t:[["Drowning is usually silent and fast, not the shouting and splashing people expect.","US Centers for Disease Control and Prevention"],
+    ["Infants should sleep on their back, on a firm flat surface, with nothing soft in the crib.","American Academy of Pediatrics"]],
+ f:["Inflatable armbands and pool floats are a reasonable way to keep a small child safe in water.","They're toys, not safety devices. They slip off and deflate, and the false confidence they give the adult watching is the bigger danger. A fitted, approved life jacket is the equipment."]},
+
+{t:[["Rear-facing car seats are recommended for as long as the child fits the seat's height and weight limits.","American Academy of Pediatrics"],
+    ["A bike helmet that has taken a real impact should be replaced even if it looks fine.","US Consumer Product Safety Commission"]],
+ f:["Once a child can walk confidently, a forward-facing seat is the safer option for their legs.","Bent legs in a rear-facing seat aren't a safety problem. Rear-facing spreads crash force across the whole back and head, which is why the recommendation runs on age and size, not walking."]},
+
+{t:[["Perishable food shouldn't sit out more than two hours; bacteria multiply fastest between about 40 and 140°F.","US Department of Agriculture"],
+    ["Thaw meat in the fridge, in cold water, or in the microwave — not on the counter.","US Department of Agriculture"]],
+ f:["If food looks and smells fine, it's safe to eat.","The bacteria that cause food poisoning usually don't change how food looks, smells or tastes. Spoilage bacteria are a different set, and they're the ones you can smell."]},
+
+{t:[["Rinsing raw chicken sprays bacteria around your sink; cooking to temperature is what kills it.","US Centers for Disease Control and Prevention"],
+    ["'Best by' dates in the US are about quality, not safety, and aren't federally regulated except on infant formula.","US Department of Agriculture"]],
+ f:["A hot pan will kill anything, so cross-contamination from the cutting board isn't a real risk.","The pan only sterilizes what goes in it. The salad you cut afterwards on the same board never gets heated, which is where a lot of household food poisoning starts."]},
+
+{t:[["Microwaves heat water molecules near the surface and the heat conducts inward, which is why standing time matters.","US Food and Drug Administration"],
+    ["Reheating leftovers all the way through, not just warm on the outside, is what makes them safe.","US Department of Agriculture"]],
+ f:["The five-second rule holds up: bacteria need a moment to transfer to dropped food.","Transfer starts immediately. How much you pick up depends on how wet the food is and how dirty the floor is, not on how fast you move."]},
+
+{t:[["Serving sizes on US nutrition labels reflect what people typically eat, not what's recommended.","US Food and Drug Administration"],
+    ["Ingredients are listed by weight, so the first few make up most of the product.","US Food and Drug Administration"]],
+ f:["'Natural' on a US food label is a regulated term with requirements behind it.","The FDA has never formally defined it. 'Organic' is regulated and audited. 'Natural' is mostly a marketing word."]},
+
+{t:[["Chocolate, grapes, onions and xylitol are all toxic to dogs.","ASPCA Animal Poison Control"],
+    ["Xylitol in sugar-free gum can cause a life-threatening drop in a dog's blood sugar.","US Food and Drug Administration"]],
+ f:["A warm, dry nose is a reliable sign a dog is unwell.","Nose temperature changes all day for ordinary reasons. Appetite, energy and behaviour tell you something; the nose doesn't."]},
+
+{t:[["Most adult cats are lactose intolerant, and cow's milk gives them stomach upsets.","International Cat Care"],
+    ["Cats can't taste sweetness; the receptor gene doesn't work in them.","PLOS Genetics, 2005"]],
+ f:["Dogs and cats heal wounds by licking them, so it's best to let them.","Licking introduces bacteria and reopens the wound, which is the entire reason vets send animals home in a cone."]},
+
+{t:[["Length does more for password strength than swapping letters for symbols.","US National Institute of Standards and Technology"],
+    ["NIST no longer recommends forcing routine password changes without a sign of compromise.","NIST Special Publication 800-63B"]],
+ f:["Changing every password every 90 days is the single strongest thing you can do for your accounts.","Forced rotation pushes people toward small predictable edits of the same password. Long unique passwords plus two-factor authentication does far more."]},
+
+{t:[["The padlock in your browser means the connection is encrypted, not that the site is legitimate.","US Cybersecurity and Infrastructure Security Agency"],
+    ["Text-message two-factor codes are vulnerable to SIM-swap attacks, though still much better than no second factor.","US National Institute of Standards and Technology"]],
+ f:["A .org address means the organization is a registered nonprofit.","Anyone can buy a .org. The suffix tells you nothing about who runs the site or whether they're accountable to anyone."]},
+
+{t:[["Private browsing only clears local history and cookies; your network, employer and ISP still see the traffic.","Mozilla and Google browser documentation"],
+    ["Most major sites now use HTTPS, so public wifi snooping is much less dangerous than it was a decade ago.","Electronic Frontier Foundation"]],
+ f:["A VPN protects you from malware and phishing sites.","It encrypts and reroutes your traffic. It doesn't scan downloads or block a fake login page — you can be phished perfectly well through a VPN."]},
+
+{t:[["Reference prices like 'was $200' are loosely policed and are often prices that were never charged.","US Federal Trade Commission"],
+    ["Free trials that convert to paid subscriptions have to disclose the terms clearly under US rules.","US Federal Trade Commission"]],
+ f:["A countdown timer on a checkout page means the price genuinely expires when it hits zero.","Most reset when you reload. The timer is a pressure device, and the FTC has taken action over fake urgency claims."]},
+
+{t:[["The number inside the recycling triangle is the plastic resin type, not a promise your area accepts it.","US Environmental Protection Agency"],
+    ["A greasy or wet item can contaminate a whole batch of recycling.","US Environmental Protection Agency"]],
+ f:["Recycling rules are national, so if something is recyclable in one city it's recyclable everywhere.","What's accepted is set locally by what the processing facility can actually sell. Putting hopeful items in the bin is a real cost to the system."]},
+
+{t:[["Turning a thermostat far above your target doesn't heat the house faster; most systems have one output rate.","US Department of Energy"],
+    ["Washing laundry in cold water works for most loads with modern detergent, and heating the water is most of the cycle's energy.","US Department of Energy"]],
+ f:["Closing the vents in rooms you don't use saves money on a central forced-air system.","It raises pressure in the ducts, which pushes air out through leaks and makes the whole system work harder. Most efficiency guidance says leave them open."]},
+
+{t:[["Lithium-ion batteries age faster when kept at full charge or near empty for long stretches.","battery manufacturer guidance"],
+    ["Heat does more damage to a phone battery than charging habits do.","Apple and Samsung device documentation"]],
+ f:["You should let a phone run down to 0% before charging, to keep the battery from losing capacity.","That was the memory effect in old nickel-cadmium cells. Full discharges actively stress lithium-ion batteries — partial top-ups are easier on them."]},
+
+{t:[["Stretching before exercise hasn't been shown to prevent injury; the warm-up is the part that helps.","American College of Sports Medicine"],
+    ["Muscle soreness a day or two later isn't caused by lactic acid, which clears within about an hour.","American College of Sports Medicine"]],
+ f:["You can burn fat off a specific area by targeting it with exercise.","Spot reduction doesn't happen. The exercise builds muscle where you do it, but where your body draws fat from isn't something the exercise chooses."]},
+
+{t:[["Screen use causes temporary eye strain but there's no evidence it permanently damages adult eyes.","American Academy of Ophthalmology"],
+    ["Time spent outdoors in childhood is associated with lower rates of short-sightedness.","American Academy of Ophthalmology"]],
+ f:["Sitting close to a screen damages a child's eyesight over time.","It doesn't cause damage. A child sitting very close is often a sign they're already short-sighted, which is worth an eye test — the sitting isn't the cause."]},
+
+{t:[["Cold weather doesn't cause colds; viruses do, and we spread them by crowding indoors.","US Centers for Disease Control and Prevention"],
+    ["Handwashing with soap remains among the most effective ways to avoid respiratory and stomach infections.","US Centers for Disease Control and Prevention"]],
+ f:["Going outside with wet hair is how you catch a cold.","You need to encounter the virus. Being chilled doesn't create one, and this belief mostly just makes people blame the wrong thing and miss the actual transmission."]},
+
+{t:[["Brushing right after acidic food or drink can wear enamel that's temporarily softened.","American Dental Association"],
+    ["Fluoride is the main reason toothpaste prevents cavities.","American Dental Association"]],
+ f:["Brushing harder cleans your teeth more thoroughly.","Pressure wears enamel and pushes gums back, and receding gums don't grow back. Soft bristles and time do the work."]},
+
+{t:[["Handwriting analysis has no demonstrated ability to predict job performance.","British Psychological Society"],
+    ["Polygraph results are inadmissible in most US courts.","American Psychological Association"]],
+ f:["Personality tests like Myers-Briggs sort people into stable types that are reliable enough for hiring decisions.","Around half of people get a different result on a retake weeks later. It's widely used in workplaces anyway, which is the problem."]},
+
+{t:[["Teaching to a student's preferred 'learning style' hasn't been shown to improve results.","Psychological Science in the Public Interest, 2008"],
+    ["Testing yourself on material beats rereading it, by a wide margin, for long-term retention.","cognitive psychology replication literature"]],
+ f:["People are either left-brained and analytical or right-brained and creative.","Imaging of over a thousand brains found no evidence that individuals favour one hemisphere. It's a durable myth that people use to rule out things they could learn."]},
 
 {t:[["False news stories spread faster and reach more people on social media than true ones.","Vosoughi, Roy and Aral, Science, 2018"],
-    ["Retracted scientific papers keep getting cited for years after they're withdrawn.","Retraction Watch"]],
- f:["Correcting a myth always backfires and makes people believe it more.","The backfire effect showed up in some early studies but has largely failed to replicate at scale. Corrections usually help, they just don't travel as far."]},
+    ["Retracted scientific papers keep being cited for years after they're withdrawn.","Retraction Watch"]],
+ f:["Correcting someone's misinformation backfires and makes them believe it harder.","The backfire effect showed up in a few early studies and has largely failed to replicate. Corrections generally work — they just travel far less than the original claim."]},
 
-{t:[["Only 39 of 100 psychology studies were successfully replicated in a large 2015 replication project.","Open Science Collaboration, Science, 2015"],
-    ["Requiring researchers to register their hypothesis in advance sharply cut the rate of positive results in medical trials.","Kaplan and Irvin, PLOS ONE, 2015"]],
- f:["Peer review means independent scientists have re-analysed the study's raw data.","Reviewers usually read the manuscript only. Most never see the underlying data, and they aren't paid to check the arithmetic."]},
-
-{t:[["A well-drawn random sample of about 1,000 people gives a margin of error near ±3 points, whatever the population size.","Pew Research Center"],
+{t:[["A well-drawn random sample of about a thousand people gives a margin of error near three points, whatever the population size.","Pew Research Center"],
     ["Response rates for US telephone polls have fallen into the single digits.","Pew Research Center"]],
- f:["A survey is only reliable if the sample is at least 10% of the population.","Sample size matters; the fraction of the population barely does. 1,000 random people describe a country of 60 million about as well as a country of 6 million."]},
+ f:["A survey isn't reliable unless it samples at least 10% of the population.","How the sample was drawn matters enormously; what fraction of the population it represents barely matters at all. This one gets used to dismiss good polling and defend bad polling."]},
 
-{t:[["A 1936 magazine poll with over two million responses confidently predicted the wrong US president, because of who it sampled.","American Statistical Association"],
-    ["The 'hot hand' in basketball turned out to be partly real once a subtle statistical error in the original study was corrected.","Miller and Sanjurjo, Econometrica, 2018"]],
- f:["A correlation above 0.8 is strong enough to prove one thing causes the other.","Correlation of any strength says nothing about cause. A third factor, or pure coincidence, can produce a near-perfect correlation."]},
+{t:[["People consistently overestimate how large their country's immigrant population is.","Ipsos Perils of Perception"],
+    ["Violent crime in the US fell by roughly half from the early 1990s to the late 2010s, even as most people said it was rising.","US Bureau of Justice Statistics; Gallup"]],
+ f:["A correlation strong enough — say above 0.8 — is enough to establish that one thing causes the other.","Correlation of any strength says nothing about direction or cause. A third factor driving both produces very high correlations all the time."]},
 
-{t:[["A trend can reverse when you combine groups, as in a famous Berkeley admissions case where each department favoured women but the total looked the opposite.","Bickel et al., Science, 1975"],
-    ["In many real datasets, the leading digit is a 1 about 30% of the time, which auditors use to spot faked figures.","Benford's law"]],
- f:["A p-value of 0.05 means there's a 95% chance the finding is real.","It means that if nothing were going on, you'd see data this extreme 5% of the time. It says nothing directly about the chance the finding is true."]},
-
-{t:[["The Hundred Years' War lasted 116 years.","Encyclopaedia Britannica"],
-    ["Woolly mammoths were still alive on Wrangel Island while the Great Pyramid stood.","Nature"]],
- f:["Ancient Greek and Roman statues were originally plain white marble.","They were painted in strong colours. The paint weathered off, and later collectors decided the bare stone was the intended look."]},
-
-{t:[["Roman seawater concrete gets stronger over time as seawater reacts with its volcanic ash.","American Mineralogist, 2017"],
-    ["The body casts at Pompeii are plaster poured into the hollows left where bodies decayed.","Archaeological Park of Pompeii"]],
- f:["Roman gladiator fights almost always ended with one fighter dead.","Trained gladiators were expensive investments. Most bouts ended without a death, and fighters had records across many fights."]},
-
-{t:[["The people executed in the Salem witch trials were hanged, not burned.","Salem Witch Museum"],
-    ["The Library of Alexandria declined slowly over centuries rather than burning down in a single night.","Encyclopaedia Britannica"]],
- f:["Medieval Europeans believed the Earth was flat until Columbus proved otherwise.","Educated Europeans had accepted a round Earth since antiquity. The argument against Columbus was that he had underestimated how far Asia was."]},
-
-{t:[["Einstein did not fail mathematics at school; he had mastered calculus by 15.","Einstein Archives"],
-    ["Einstein was offered the presidency of Israel in 1952 and turned it down.","Israel State Archives"]],
- f:["Einstein won his Nobel Prize for the theory of relativity.","He won it in 1921 for explaining the photoelectric effect. Relativity was still considered too contentious by the committee."]},
-
-{t:[["Edison didn't invent the light bulb; he developed a version that lasted long enough to sell.","Smithsonian Institution"],
-    ["Alternating current won out over Edison's direct current for long-distance power.","IEEE"]],
- f:["Benjamin Franklin proposed the turkey as the national bird of the United States.","He made a joke about it in a private letter, after the eagle had already been chosen. He never put the turkey forward."]},
-
-{t:[["Nintendo was founded in 1889 and originally made playing cards.","Nintendo Co., Ltd."],
-    ["Samsung started in 1938 as a trading company dealing in groceries and dried fish.","Samsung"]],
- f:["The bite in the Apple logo is a tribute to Alan Turing.","The designer, Rob Janoff, has said the bite was for scale, so it wouldn't be mistaken for a cherry. He has called the Turing story a nice coincidence."]},
-
-{t:[["In English, orange was the name of the fruit before it was the name of the colour.","Oxford English Dictionary"],
-    ["The word salary comes from the Latin word for salt.","Oxford English Dictionary"]],
- f:["Posh comes from 'Port Out, Starboard Home', the shady side of a ship to India.","No ticket or shipping document has ever been found using it. The dictionary lists the origin as unknown."]},
-
-{t:[["'Set' has one of the longest entries in the Oxford English Dictionary.","Oxford English Dictionary"],
-    ["Shakespeare's plays contain the first recorded use of well over a thousand English words.","Folger Shakespeare Library"]],
- f:["Inuit languages have hundreds of separate words for snow.","The claim grew with each retelling from an original observation of about four roots. These languages also build long compound words, so counting 'words' at all is misleading."]},
-
-{t:[["Raindrops aren't teardrop-shaped; falling ones flatten into a bun shape.","NASA"],
-    ["An ordinary fair-weather cumulus cloud weighs hundreds of tonnes.","US Geological Survey"]],
- f:["It has been scientifically proven that no two snowflakes are alike.","It's a probability argument, not a proof, and in 1988 a researcher found two crystals that appeared identical. Nobody could check every snowflake anyway."]},
-
-{t:[["Caffeine is the most widely used psychoactive drug in the world.","US National Institutes of Health"],
-    ["Decaffeinated coffee still contains a small amount of caffeine.","US Food and Drug Administration"]],
- f:["Coffee is the second most traded commodity in the world after oil.","Repeated constantly, including by the coffee industry. Actual trade figures put coffee far down the list, below wheat, iron and many others."]},
-
-{t:[["Chocolate is poisonous to dogs because they clear theobromine very slowly.","ASPCA"],
-    ["Cats can't taste sweetness; the gene for the sweet receptor doesn't work in them.","PLOS Genetics, 2005"]],
- f:["A saucer of cow's milk is a good treat for an adult cat.","Most adult cats are lactose intolerant. The milk gives them stomach upsets, which is why vets advise against it."]},
-
-{t:[["Dogs sweat mainly through their paw pads and cool themselves by panting.","American Kennel Club"],
-    ["A dog's sense of smell is tens of thousands of times more sensitive than a human's.","US National Institutes of Health"]],
- f:["One dog year equals seven human years.","Dogs age fastest in their first two years, then slow down, and the rate varies a lot by breed and size. The seven-to-one figure was a rough marketing simplification."]},
-
-{t:[["Bats are the only mammals capable of true sustained flight.","Smithsonian Institution"],
-    ["No bat species is blind, and many see better than humans in low light.","Bat Conservation International"]],
- f:["Camels store water in their humps.","The humps are fat. Camels survive on water carried in their bloodstream and tissues, and by tolerating dehydration far better than we can."]},
-
-{t:[["There are no penguins in the Arctic; all wild penguins live in the southern hemisphere.","WWF"],
-    ["Emperor penguins can dive to depths over 500 metres.","British Antarctic Survey"]],
- f:["Penguins mate for life.","Some species stay with a partner for years, but many switch between seasons. Fidelity varies enormously depending on the species."]},
-
-{t:[["Everest gains a few millimetres of height a year as the plates beneath it push upward.","2020 joint China-Nepal survey"],
-    ["The Dead Sea's surface is dropping by roughly a metre a year.","Geological Survey of Israel"]],
- f:["The Great Barrier Reef is the largest living organism on Earth.","It's a structure built by billions of separate coral animals, not one organism. The single-organism title usually goes to a fungus or an aspen grove."]},
-
-{t:[["Tectonic plates move at roughly the speed your fingernails grow.","US Geological Survey"],
-    ["Earth's inner core is solid iron, kept from melting by the pressure on it.","US Geological Survey"]],
- f:["Earth's magnetic poles have never swapped places.","They've reversed hundreds of times, recorded in the magnetic stripes of ocean floor rock. The last full reversal was around 780,000 years ago."]},
-
-{t:[["Iceland generates almost all of its electricity from hydro and geothermal sources.","National Energy Authority of Iceland"],
-    ["Solar power became the cheapest source of new electricity in many markets by 2020.","International Energy Agency"]],
- f:["A wind turbine never generates as much energy as it took to build.","Life-cycle studies put the energy payback for a modern turbine at well under a year, against a service life of 20 to 25 years."]},
-
-{t:[["Recycling aluminium uses about 95% less energy than making it from raw ore.","US Environmental Protection Agency"],
-    ["Only around 9% of all plastic ever made has been recycled.","Geyer, Jambeck and Law, Science Advances, 2017"]],
- f:["The Great Pacific Garbage Patch is a solid floating island of rubbish you could walk on.","It's mostly a diffuse soup of small fragments spread over a huge area, much of it below the surface. There's nothing to stand on."]},
-
-{t:[["The average person's tongue print is as distinctive as a fingerprint, and has been studied for identification.","Journal of Forensic Dental Sciences"],
-    ["The human nose can distinguish far more than the 10,000 odours long claimed; one estimate puts it near a trillion.","Bushdid et al., Science, 2014"]],
- f:["Your tongue is the strongest muscle in your body.","It isn't one muscle, and it isn't the strongest by any measure. The jaw muscle wins on force, the heart on endurance."]},
-
-{t:[["Cracked heels aside, the skin you shed accounts for a large share of household dust.","American Academy of Dermatology"],
-    ["Hair and nails do not keep growing after death; the skin around them retracts.","BBC Science Focus / forensic pathology"]],
- f:["Your body completely replaces every one of its cells every seven years.","Some cells turn over in days, but most neurons in the brain and the lenses of your eyes last a lifetime. The seven-year figure is an average that hides all of that."]},
-
-{t:[["A commercial aircraft's cabin air is exchanged completely every few minutes and passed through HEPA filters.","International Air Transport Association"],
-    ["Turbulence has caused very few passenger deaths in modern commercial aviation.","US National Transportation Safety Board"]],
- f:["The safest seats on a plane are the ones at the back.","Crash data is too varied and too rare to support a rule like this. Different accidents favour different parts of the aircraft."]},
-
-{t:[["Most of the tax revenue lost to error and fraud in benefit systems is dwarfed by the amount lost to unclaimed entitlements in many countries.","National Audit Office, UK"],
-    ["Violent crime rates in the US fell by roughly half between the early 1990s and the late 2010s.","US Bureau of Justice Statistics"]],
- f:["Crime in most developed countries has risen every year for the past two decades.","Recorded crime has fallen substantially across most of Europe and North America since the 1990s, even though surveys show most people believe the opposite."]},
-
-{t:[["People consistently estimate their country's immigrant population to be far higher than it is.","Ipsos Perils of Perception survey"],
-    ["Fatal shark attacks worldwide typically number in the single digits each year.","International Shark Attack File"]],
- f:["Sharks kill more people each year than falling coconuts.","Both numbers are tiny, but the coconut figure was invented outright by a press release and has no data behind it at all. It gets cited as if it were a study."]}
+{t:[["A 1936 magazine poll with over two million responses predicted the wrong US president, because of who it sampled.","American Statistical Association"],
+    ["Combining groups can reverse a trend, as in a Berkeley admissions case where each department favoured women but the total appeared not to.","Bickel et al., Science, 1975"]],
+ f:["A p-value of 0.05 means there's a 95% chance the finding is real.","It means data this extreme would turn up 5% of the time if nothing were going on. It says nothing directly about the probability the finding is true — a distinction that decides which drugs and policies get adopted."]}
 
 ];
 
